@@ -16,7 +16,7 @@
             <h1 class="title">Login</h1>
             <img src="src/img/line1.png" alt="Divider" class="divider">
             
-            <form class="login-form">
+            <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="username">Username :</label>
                     <input type="text" id="username" name="username" class="input-field" required>
@@ -26,6 +26,8 @@
                     <label for="password">Password :</label>
                     <input type="password" id="password" name="password" class="input-field" required>
                 </div>
+
+                <div id="errorMessage" class="error-message"></div>
                 
                 <div class="button-group">
                     <button type="submit" class="btn-confirm">Confirm</button>
@@ -34,5 +36,26 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // Username: knight | Password: hollownest
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (username === 'knight' && password === 'hollownest') {
+                errorMsg.style.display = 'none';
+                alert('Login berhasil!');
+                // Redirect ke halaman utama
+                window.location.href = 'index.html';
+            } else {
+                errorMsg.textContent = 'Zote The Mighty Said :\nPassword atau Username salah bang';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
