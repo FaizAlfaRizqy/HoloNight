@@ -1,8 +1,8 @@
 ﻿# HoloNight
 
 Proyek website bertema Hollow Knight oleh:
-- Nathanael Jovan Wahyudi : Backend
-- Muhammad Umar Faiz Alfa Rizqy : Frontend
+- Backend : Nathanael Jovan Wahyudi
+- Frontend : Muhammad Umar Faiz Alfa Rizqy
 
 ## Struktur File
 
@@ -56,7 +56,7 @@ Proyek website bertema Hollow Knight oleh:
 - HTML5
 - CSS3
 - JavaScript (Vanilla)
-- LocalStorage untuk penyimpanan data
+- MySQL
 
 ## Desain
 - Tema: Dark dengan gradient biru

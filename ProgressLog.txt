@@ -12,7 +12,7 @@ UI/UX:
 Frontend:
 - Create Login page
 - Create Register page
-- Create landing page
+- Create landing page 20%
 Backend:
 - create login table
 - create leaderboard table
