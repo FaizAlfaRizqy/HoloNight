@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hollow Knight</title>
-    <link rel="stylesheet" href="style/style.css">
+    <title>Hollow Knight - Login</title>
+    <link rel="stylesheet" href="style/login.css">
 </head>
 <body>
     <div class="login-container">
@@ -13,11 +13,31 @@
         </video>
         <div class="overlay"></div>
         <div class="content">
-            <img src="src/img/logo.png" alt="Hollow Knight Logo" class="logo">
-            <nav class="menu">
-                <a href="#" class="menu-item">Login</a>
-                <a href="#" class="menu-item">Register</a>
-            </nav>
+            <h1 class="title">Login</h1>
+            <img src="src/img/line1.png" alt="Divider" class="divider">
+            
+            <form class="login-form">
+                <div class="form-group">
+                    <label for="username">Username :</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" required>
+                        <img src="src/img/input.png" alt="Input Box" class="input-bg">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password :</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" required>
+                        <img src="src/img/input.png" alt="Input Box" class="input-bg">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-confirm">Confirm</button>
+                    <a href="index.html" class="btn-back">Back</a>
+                </div>
+            </form>
         </div>
     </div>
 </body>
