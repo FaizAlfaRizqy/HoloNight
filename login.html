@@ -37,7 +37,37 @@
         </div>
     </div>
 
+    <audio id="bgMusic" loop>
+        <source src="src/music/CityOfTears.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button id="musicToggle" class="music-toggle">🔊</button>
+
     <script>
+        const music = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicToggle.textContent = '🔇';
+                isPlaying = false;
+            } else {
+                music.play();
+                musicToggle.textContent = '🔊';
+                isPlaying = true;
+            }
+        });
+
+        document.addEventListener('click', () => {
+            if (!isPlaying) {
+                music.play();
+                musicToggle.textContent = '🔊';
+                isPlaying = true;
+            }
+        }, { once: true });
+
         // Username: knight | Password: hollownest
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();

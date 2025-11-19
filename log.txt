@@ -1,0 +1,19 @@
+**18/11/2025**
+UI/UX:
+- Create Login UI
+- Create Register UI
+- Create Landing page UI
+- Create 4 design for character page UI
+
+**19/11/2025**
+UI/UX:
+- Fixing design for character page UI
+- Add details in Login, Register, and Landing page
+Frontend:
+- Create Login page
+- Create Register page
+- Create landing page
+Backend:
+- create login table
+- create leaderboard table
+- create structure for CRUD
