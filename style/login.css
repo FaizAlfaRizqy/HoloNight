@@ -89,7 +89,7 @@ body {
     letter-spacing: 2px;
     text-transform: uppercase;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    min-width: 150px;
+    min-width: 270px;
     text-align: right;
     z-index: 2;
 }
@@ -164,6 +164,21 @@ body {
     border: 1px solid rgba(255, 107, 107, 0.3);
     border-radius: 5px;
     text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    white-space: pre-line;
+    max-width: 400px;
+}
+
+.success-message {
+    display: none;
+    color: #6bff6b;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px 0;
+    padding: 15px;
+    background: rgba(107, 255, 107, 0.1);
+    border: 1px solid rgba(107, 255, 107, 0.3);
+    border-radius: 5px;
+    text-shadow: 0 0 10px rgba(107, 255, 107, 0.5);
     white-space: pre-line;
     max-width: 400px;
 }
