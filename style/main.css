@@ -15,7 +15,7 @@ body {
     font-family: 'Cinzel', serif;
     overflow-x: hidden;
     width: 100%;
-    min-height: 100vh;
+    background-color: #000;
 }
 
 .hero-container {
@@ -73,10 +73,161 @@ body {
     }
 }
 
+/* Content Section */
+.content-section {
+    width: 100%;
+    min-height: 400vh;
+    background-image: url('../src/background/main-bg-static1.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: repeat-y;
+    background-attachment: scroll;
+    position: relative;
+    padding: 100px 50px 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Story Cards */
+.story-card {
+    max-width: 800px;
+    margin: 150px auto;
+    padding: 60px 50px;
+    background: rgba(10, 15, 30, 0.85);
+    border: 2px solid rgba(100, 150, 200, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+.story-card:last-of-type {
+    margin-top: auto;
+    margin-bottom: 35vh;
+    transform: translateY(200px);
+    position: relative;
+}
+
+.story-card h2 {
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 20px;
+}
+
+.divider-line {
+    width: 300px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+    margin: 30px auto;
+}
+
+.story-card p {
+    font-size: 16px;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.story-card .subtitle {
+    font-size: 24px;
+    letter-spacing: 3px;
+    margin: 30px 0 20px;
+    color: #8ab4d5;
+    text-shadow: 0 0 15px rgba(138, 180, 213, 0.5);
+}
+
+.icon-decoration {
+    font-size: 48px;
+    margin: 20px 0;
+    opacity: 0.7;
+}
+
+/* Knight Character */
+.knight-character {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: auto;
+    z-index: 10;
+}
+
+/* Continue Prompt */
+.continue-prompt {
+    text-align: center;
+    padding: 20px 0;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Music Toggle Button */
+.music-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.music-toggle:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(138, 180, 213, 0.5);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-logo {
         width: 500px;
+    }
+    
+    .story-card {
+        padding: 40px 30px;
+        margin: 100px 20px;
+    }
+    
+    .story-card h2 {
+        font-size: 28px;
+    }
+    
+    .story-card p {
+        font-size: 14px;
     }
 }
 
@@ -84,4 +235,19 @@ body {
     .hero-logo {
         width: 350px;
     }
+    
+    .story-card {
+        padding: 30px 20px;
+    }
+    
+    .story-card h2 {
+        font-size: 24px;
+    }
+}
+
+.infection-card {
+    margin-top: auto;
+    margin-bottom: 50vh;
+    transform: translateY(200px) !important;
+    position: relative;
 }
