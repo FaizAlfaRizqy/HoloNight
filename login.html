@@ -13,27 +13,38 @@
         </video>
         <div class="overlay"></div>
         <div class="content">
-            <h1 class="title">Login</h1>
-            <img src="src/img/line1.png" alt="Divider" class="divider">
+            <div class="decorative-border-top">
+                <img src="src/img/lineTop.png" alt="top decoration" class="line-decoration">
+            </div>
+            
+            <h1 class="title">SIGN IN</h1>
+            
+            <div class="divider">
+                <img src="src/img/line1.png" alt="divider" class="divider-img">
+            </div>
             
             <form class="login-form" id="loginForm">
                 <div class="form-group">
-                    <label for="username">Username :</label>
+                    <label for="username">Username</label>
                     <input type="text" id="username" name="username" class="input-field" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password :</label>
+                    <label for="password">Password</label>
                     <input type="password" id="password" name="password" class="input-field" required>
                 </div>
 
                 <div id="errorMessage" class="error-message"></div>
                 
                 <div class="button-group">
-                    <button type="submit" class="btn-confirm">Confirm</button>
-                    <a href="index.html" class="btn-back">Back</a>
+                    <button type="submit" class="btn-confirm">CONFIRM</button>
+                    <a href="index.html" class="btn-back">BACK</a>
                 </div>
             </form>
+            
+            <div class="decorative-border-bottom">
+                <img src="src/img/lineBot.png" alt="bottom decoration" class="line-decoration">
+            </div>
         </div>
     </div>
 
@@ -68,7 +79,6 @@
             }
         }, { once: true });
 
-        // Username: knight | Password: hollownest
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -78,7 +88,6 @@
             
             if (username === 'knight' && password === 'hollownest') {
                 errorMsg.style.display = 'none';
-                // Redirect ke halaman utama
                 window.location.href = 'main.html';
             } else {
                 errorMsg.textContent = 'Zote The Mighty Said :\nPassword atau Username salah bang';

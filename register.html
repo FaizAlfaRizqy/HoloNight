@@ -7,44 +7,51 @@
     <link rel="stylesheet" href="style/login.css">
 </head>
 <body>
-    <div class="login-container">
+    <div class="register-container">
         <video class="video-background" autoplay loop muted playsinline>
             <source src="src/background/login.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
         <div class="content">
-            <h1 class="title">Register</h1>
-            <img src="src/img/line1.png" alt="Divider" class="divider">
+            <div class="decorative-border-top">
+                <img src="src/img/lineTop.png" alt="top decoration" class="line-decoration">
+            </div>
             
-            <form class="login-form" id="registerForm">
+            <h1 class="title">SIGN UP</h1>
+            
+            <div class="divider">
+                <img src="src/img/line1.png" alt="divider" class="divider-img">
+            </div>
+            
+            <form class="register-form" id="registerForm">
                 <div class="form-group">
-                    <label for="username">Username :</label>
-                    <input type="text" id="username" name="username" class="input-field" required>
+                    <input type="text" id="username" name="username" class="input-field" placeholder="USERNAME" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email :</label>
-                    <input type="email" id="email" name="email" class="input-field" required>
+                    <input type="email" id="email" name="email" class="input-field" placeholder="EMAIL" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password :</label>
-                    <input type="password" id="password" name="password" class="input-field" required>
+                    <input type="password" id="password" name="password" class="input-field" placeholder="PASSWORD" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="confirmPassword">Confirm Password :</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" required>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="input-field" placeholder="CONFIRM PASSWORD" required>
                 </div>
 
                 <div id="errorMessage" class="error-message"></div>
                 <div id="successMessage" class="success-message"></div>
                 
                 <div class="button-group">
-                    <button type="submit" class="btn-confirm">Confirm</button>
-                    <a href="index.html" class="btn-back">Back</a>
+                    <button type="submit" class="btn-confirm">CONFIRM</button>
+                    <a href="index.html" class="btn-back">BACK</a>
                 </div>
             </form>
+            
+            <div class="decorative-border-bottom">
+                <img src="src/img/lineBot.png" alt="bottom decoration" class="line-decoration">
+            </div>
         </div>
     </div>
 
