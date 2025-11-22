@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hollow Knight</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <video class="video-background" autoplay loop muted playsinline>
+            <source src="src/background/login.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="content">
+            <img src="src/img/logo.png" alt="Hollow Knight Logo" class="logo">
+            <nav class="menu">
+                <a href="login.php" class="menu-item">Login</a>
+                <a href="register.php" class="menu-item">Register</a>
+            </nav>
+        </div>
+    </div>
+    
+    <audio id="bgMusic" loop>
+        <source src="src/music/CityOfTears.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button id="musicToggle" class="music-toggle">🔊</button>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicToggle.textContent = '🔇';
+                isPlaying = false;
+            } else {
+                music.play();
+                musicToggle.textContent = '🔊';
+                isPlaying = true;
+            }
+        });
+
+        // Auto play music on first interaction
+        document.addEventListener('click', () => {
+            if (!isPlaying) {
+                music.play();
+                musicToggle.textContent = '🔊';
+                isPlaying = true;
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
