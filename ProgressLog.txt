@@ -22,3 +22,13 @@ Backend:
 Backend:
 - sinkronisasi database yang sudah dibuat dengan style front end
 - suara menjadi aneh (tidak mau play di awal login, kadang suka berhenti sendiri) mungkin dikarenakan pindah page, atau aku apakan
+
+**24/11/2025**
+UI:
+- create second design
+Frontend:
+- renew login and register design
+
+**27/11/2025**
+Frontend:
+- Create game prototype (20%)
