@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="style/game.css">
 </head>
 <body>
+    <!-- UI Left Image -->
+    <img src="src/game/ui/left.png" alt="UI Left" class="ui-left-image">
+
     <div class="game-ui">
         <div>Health: <span id="health">5</span>/5</div>
         <div>Score: <span id="score">0</span></div>
@@ -32,7 +35,9 @@
         <button class="restart-btn" onclick="window.location.href='main.html'">BACK TO MENU</button>
     </div>
 
-    <canvas id="gameCanvas" width="1200" height="700"></canvas>
+    <div id="canvasWrapper">
+        <canvas id="gameCanvas"></canvas>
+    </div>
 
     <script src="script/game.js"></script>
 </body>
