@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #000;
+    overflow: hidden;
+    font-family: 'Cinzel', serif;
+}
+
+#gameCanvas {
+    display: block;
+    margin: 0 auto;
+    background: url('../src/game/object/background_3.png') no-repeat center center;
+    background-size: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.game-ui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-size: 18px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+.controls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-size: 14px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    display: none;
+}
+
+.game-over h1 {
+    font-size: 48px;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+}
+
+.game-over p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+}
+
+.restart-btn {
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 10px;
+    transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
