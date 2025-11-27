@@ -10,19 +10,29 @@
     <!-- UI Left Image -->
     <img src="src/game/ui/left.png" alt="UI Left" class="ui-left-image">
 
-    <div class="game-ui">
-        <div>Health: <span id="health">5</span>/5</div>
-        <div>Score: <span id="score">0</span></div>
-        <div>State: <span id="state">idle</span></div>
-        <div>Enemies: <span id="enemyCount">3</span></div>
+    <!-- Username (Top Center) -->
+    <div class="top-center-ui">
+        <div class="username">USERNAME</div>
     </div>
 
-    <div class="controls">
-        <div>Controls:</div>
-        <div>A/D - Move Left/Right</div>
-        <div>W/Space - Jump</div>
-        <div>X/Enter - Attack</div>
-        <div>S - Crouch</div>
+    <!-- Health Container (Top Left) -->
+    <div class="health-container" id="healthContainer">
+        <img src="src/game/ui/health.png" alt="Health" class="health-icon">
+        <img src="src/game/ui/health.png" alt="Health" class="health-icon">
+        <img src="src/game/ui/health.png" alt="Health" class="health-icon">
+        <img src="src/game/ui/health.png" alt="Health" class="health-icon">
+        <img src="src/game/ui/health.png" alt="Health" class="health-icon">
+    </div>
+
+    <!-- Money/Score Container (Below Health) -->
+    <div class="money-container">
+        <img src="src/game/ui/money.png" alt="Money" class="money-icon">
+        <span class="money-text" id="moneyScore">0</span>
+    </div>
+
+    <div class="game-ui">
+        <div>State: <span id="state">idle</span></div>
+        <div>Enemies: <span id="enemyCount">3</span></div>
     </div>
 
     <a href="main.html" class="back-button">BACK TO MENU</a>
