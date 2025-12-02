@@ -18,18 +18,25 @@ Backend:
 - create leaderboard table
 - create structure for CRUD
 
-**22/11/2025**
-Backend:
-- sinkronisasi database yang sudah dibuat dengan style front end
-- suara menjadi aneh (tidak mau play di awal login, kadang suka berhenti sendiri) mungkin dikarenakan pindah page, atau aku apakan
-
-**24/11/2025**
+**21/11/2025**
 UI:
 - create second design
 Frontend:
 - renew login and register design
 
+**22/11/2025**
+Backend:
+- sinkronisasi database yang sudah dibuat dengan style front end
+- suara menjadi aneh (tidak mau play di awal login, kadang suka berhenti sendiri) mungkin dikarenakan pindah page, atau aku apakan
+
+**26/11/2025**
+UI:
+- Create leaderboard UI
+- Create navigation bar UI
+
 **27/11/2025**
+UI:
+- Create game UI
 Frontend:
 - Create game prototype (20%)
 
