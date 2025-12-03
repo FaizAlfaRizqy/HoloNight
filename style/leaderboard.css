@@ -114,7 +114,7 @@ html, body {
     justify-content: center;
     align-items: flex-end;
     gap: 20px;
-    z-index: 10;
+    z-index: 5;  /* Dari 10 */
     width: 90%;
     max-width: 900px;
 }
@@ -212,14 +212,15 @@ html, body {
 /* Leaderboard Container */
 .leaderboard-container {
     position: fixed;
-    top: 470px;
+    top: 380px;  /* Ubah dari 470px menjadi lebih kecil */
     left: 50%;
     transform: translateX(-50%);
     width: 90%;
     max-width: 900px;
-    height: calc(100vh - 500px);
+    height: calc(100vh - 400px);  /* Sesuaikan juga height */
     display: flex;
     flex-direction: column;
+    z-index: 15;  /* Tambahkan ini */
 }
 
 /* Leaderboard Table */
@@ -229,6 +230,7 @@ html, body {
     flex-direction: column;
     flex: 1;
     overflow: hidden;
+    margin-top:10px;
 }
 
 .table-header {
