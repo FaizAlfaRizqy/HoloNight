@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Poppins';
+    src: url('../fonts/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -16,6 +23,87 @@ body {
     overflow-x: hidden;
     width: 100%;
     background-color: #000;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    z-index: 1000;
+    padding: 30px 0;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start; /* Ubah dari center ke flex-start */
+    gap: 100px;
+    padding: 0 50px; /* Tambah padding kiri */
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    letter-spacing: 3px;
+    transition: all 0.3s ease;
+    padding: 10px 0;
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-link:hover {
+    color: #ff4444;
+}
+
+.nav-link.active {
+    color: #ff4444;
+}
+
+/* Auth Buttons */
+.auth-buttons {
+    position: fixed;
+    top: 30px;
+    right: 50px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    z-index: 1000;
+}
+
+.user-info {
+    padding: 12px 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    backdrop-filter: blur(5px);
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-btn {
+    padding: 12px 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
 }
 
 .hero-container {
@@ -76,12 +164,9 @@ body {
 /* Content Section */
 .content-section {
     width: 100%;
-    min-height: 400vh;
-    background-image: url('../src/background/main-bg-static1.png');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: repeat-y;
-    background-attachment: scroll;
+    min-height: auto;
+    background-color: #000;
+    background-image: none;
     position: relative;
     padding: 100px 50px 50px;
     display: flex;
@@ -90,62 +175,70 @@ body {
 
 /* Story Cards */
 .story-card {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 150px auto;
-    padding: 60px 50px;
-    background: rgba(10, 15, 30, 0.85);
-    border: 2px solid rgba(100, 150, 200, 0.3);
-    border-radius: 10px;
-    text-align: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
     color: white;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 80px;
 }
 
-.story-card:last-of-type {
-    margin-top: auto;
-    margin-bottom: 35vh;
-    transform: translateY(200px);
-    position: relative;
+.story-card:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.story-image {
+    width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: none;
+    transform: rotate(-8deg);
+    transition: transform 0.3s ease;
+}
+
+.story-card:nth-child(even) .story-image {
+    transform: rotate(8deg);
+}
+
+.story-image:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.story-content {
+    flex: 1;
+    text-align: left;
 }
 
 .story-card h2 {
-    font-size: 36px;
-    letter-spacing: 4px;
+    font-size: 48px;
+    letter-spacing: 6px;
     text-transform: uppercase;
     margin-bottom: 30px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-    padding-bottom: 20px;
+    text-shadow: none;
+    border-bottom: none;
+    padding-bottom: 0;
+    font-weight: 600;
 }
 
 .divider-line {
-    width: 300px;
-    height: 2px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
-    margin: 30px auto;
+    display: none;
 }
 
 .story-card p {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.8;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.9);
-    text-align: justify;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: left;
     margin-bottom: 20px;
-}
-
-.story-card .subtitle {
-    font-size: 24px;
-    letter-spacing: 3px;
-    margin: 30px 0 20px;
-    color: #8ab4d5;
-    text-shadow: 0 0 15px rgba(138, 180, 213, 0.5);
-}
-
-.icon-decoration {
-    font-size: 48px;
-    margin: 20px 0;
-    opacity: 0.7;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
 }
 
 /* Knight Character */
@@ -211,15 +304,197 @@ body {
     box-shadow: 0 0 20px rgba(138, 180, 213, 0.5);
 }
 
-/* Responsive */
+.infection-card {
+    margin-top: auto;
+    margin-bottom: 50vh;
+    transform: translateY(200px) !important;
+    position: relative;
+}
+
+/* Carousel Styles */
+.carousel-card {
+    position: relative;
+}
+
+.carousel-slides {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.carousel-slide {
+    display: none;
+    width: 100%;
+    align-items: center;
+    gap: 80px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-slide.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* Slide 1 dan 3 (ganjil): Gambar di kiri, teks di kanan */
+.carousel-slide:nth-child(odd) {
+    flex-direction: row;
+}
+
+.carousel-slide:nth-child(odd) .story-image {
+    transform: rotate(-8deg);
+}
+
+/* Slide 2 dan 4 (genap): Gambar di kanan, teks di kiri */
+.carousel-slide:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.carousel-slide:nth-child(even) .story-image {
+    transform: rotate(8deg);
+}
+
+.carousel-slide .story-image {
+    width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 0;
+    box-shadow: none;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.carousel-slide .story-image:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.carousel-arrow {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.carousel-arrow img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.carousel-arrow:hover {
+    transform: scale(1.2);
+}
+
+.left-arrow {
+    order: -1;
+}
+
+.right-arrow {
+    order: 1;
+}
+
+/* Auto Slider Section */
+.slider-section {
+    width: 100%;
+    overflow: hidden;
+    padding: 50px 0 100px;
+    background: #000;
+    margin-top: -50px;
+}
+
+.slider-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.slider-track {
+    display: flex;
+    gap: 30px;
+    animation: scroll 30s linear infinite;
+    width: fit-content;
+}
+
+.slider-image {
+    height: 300px;
+    width: auto;
+    object-fit: cover;
+    flex-shrink: 0;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.slider-image:hover {
+    opacity: 1;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* Pause animation on hover */
+.slider-track:hover {
+    animation-play-state: paused;
+}
+
 @media (max-width: 768px) {
+    .nav-container {
+        gap: 40px;
+    }
+
+    .nav-link {
+        font-size: 14px;
+    }
+
+    .auth-buttons {
+        top: 20px;
+        right: 20px;
+        gap: 10px;
+    }
+
+    .user-info,
+    .auth-btn {
+        padding: 8px 20px;
+        font-size: 12px;
+    }
+
     .hero-logo {
         width: 500px;
     }
     
     .story-card {
+        flex-direction: column !important;
         padding: 40px 30px;
         margin: 100px 20px;
+    }
+
+    .story-image {
+        width: 100%;
+        max-width: 300px;
+        transform: rotate(0deg) !important;
+    }
+
+    .story-content {
+        text-align: center;
+    }
+
+    .divider-line {
+        margin: 20px auto;
     }
     
     .story-card h2 {
@@ -228,6 +503,28 @@ body {
     
     .story-card p {
         font-size: 14px;
+    }
+    
+    .carousel-slide {
+        flex-direction: column !important;
+    }
+    
+    .carousel-slide .story-image {
+        transform: rotate(0deg) !important;
+    }
+    
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .slider-image {
+        height: 200px;
+    }
+    
+    .slider-track {
+        gap: 20px;
+        animation: scroll 20s linear infinite;
     }
 }
 
@@ -243,11 +540,8 @@ body {
     .story-card h2 {
         font-size: 24px;
     }
-}
 
-.infection-card {
-    margin-top: auto;
-    margin-bottom: 50vh;
-    transform: translateY(200px) !important;
-    position: relative;
+    .story-image {
+        max-width: 250px;
+    }
 }
