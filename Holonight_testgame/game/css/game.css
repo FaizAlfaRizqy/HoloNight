@@ -1,0 +1,285 @@
+/* =============================================================================
+   HOLLOW KNIGHT - FULLSCREEN GAME
+============================================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background:  #000000;
+    color: #ffffff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Canvas - Fullscreen */
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #16213e;
+}
+
+/* =============================================================================
+   MINIMAL HUD - TOP LEFT (Hollow Knight Style)
+============================================================================= */
+.stats-overlay {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Player Name - Hidden in fullscreen */
+.player-name {
+    display: none;
+}
+
+/* Stat Items - Minimal Layout */
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-label {
+    display: none; /* Hide labels for minimal UI */
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    font-family: 'Courier New', monospace;
+}
+
+.health-value {
+    display: none; /* Hide numeric health */
+}
+
+/* Health Bar - Minimal Hollow Knight Style */
+.health-bar-container {
+    width: 150px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.health-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #ffffff 0%, #e0e0e0 100%);
+    transition: width 0.3s ease;
+    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* =============================================================================
+   CONTROLS OVERLAY - BOTTOM CENTER (Minimal & Fade Out)
+============================================================================= */
+.controls-overlay {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.controls-overlay:hover {
+    opacity: 1;
+}
+
+/* =============================================================================
+   GAME OVER SCREEN
+============================================================================= */
+.game-over-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:  100%;
+    background: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.game-over-content {
+    text-align: center;
+    background: rgba(20, 30, 50, 0.95);
+    padding: 50px 70px;
+    border-radius:  20px;
+    border: 3px solid rgba(255, 107, 107, 0.5);
+    box-shadow: 0 0 50px rgba(255, 107, 107, 0.3);
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.game-over-content h2 {
+    font-size: 48px;
+    margin-bottom:  15px;
+    color: #ff6b6b;
+    text-shadow: 0 0 30px rgba(255, 107, 107, 0.8);
+    letter-spacing: 6px;
+}
+
+.game-over-subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 2px;
+}
+
+.final-stats {
+    margin:  25px 0;
+}
+
+.final-stats p {
+    font-size: 24px;
+    margin: 15px 0;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.final-stats span {
+    color: #8ab4d5;
+    font-weight: bold;
+}
+
+.game-over-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap:  15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-game {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-game:hover {
+    background: rgba(138, 180, 213, 0.3);
+    border-color: #8ab4d5;
+    box-shadow: 0 0 20px rgba(138, 180, 213, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-game:active {
+    transform: translateY(0);
+}
+
+.btn-game:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =============================================================================
+   FULLSCREEN IMMERSIVE ENHANCEMENTS
+============================================================================= */
+
+/* Remove any padding/margin from body and html */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Make canvas truly fullscreen */
+#gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+/* Fade in animation for stats */
+.stats-overlay {
+    animation: fadeInStats 1s ease;
+}
+
+@keyframes fadeInStats {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Wave transition text styling */
+.wave-transition-text {
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+}
+
+/* Health bar glow effect when low */
+.health-bar-fill[style*="width: 2"] {
+    animation: healthPulse 0.5s infinite;
+}
+
+@keyframes healthPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+    }
+}
