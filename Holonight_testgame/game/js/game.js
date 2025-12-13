@@ -307,11 +307,14 @@ function checkWaveComplete() {
 }
 
 function waveComplete() {
-    console.log(`✅ Wave ${waveManager. currentWave} Complete!`);
-    
+    console.log(`✅ Wave ${waveManager.currentWave} Complete!`);
+
     // Add wave bonus
     const waveBonus = CONFIG.SCORE.WAVE_COMPLETE;
     score += waveBonus;
+
+    // Hapus semua musuh yang sudah mati dari array enemies
+    enemies = enemies.filter(enemy => !enemy.isDead);
 
     // Jika boss wave, reward: full heal
     if (waveManager.currentWave % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0) {
