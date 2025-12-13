@@ -14,9 +14,9 @@ const CONFIG = {
     PLAYER: {
         WIDTH: 50,
         HEIGHT: 70,
-        SPEED: 6,
-        JUMP_POWER: 15,
-        GRAVITY: 0.6,
+        SPEED: 2.2,         // Lebih natural untuk per frame
+        JUMP_POWER: 10,    // Lebih natural untuk per frame
+        GRAVITY: 0.32,      // Lebih natural untuk per frame
         MAX_HP: 100,
         ATTACK_DAMAGE: 25,
         ATTACK_RANGE: 80,
@@ -30,7 +30,7 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 45,
         HEIGHT: 60,
-        BASE_SPEED: 2,
+        BASE_SPEED: 1.2,    // Lebih natural untuk per frame
         BASE_HP: 50,
         BASE_DAMAGE: 10,
         COLOR: '#ff4757',
@@ -65,7 +65,7 @@ const CONFIG = {
     PHYSICS: {
         GROUND_Y: 520,
         GROUND_HEIGHT: 80,
-        MAX_FALL_SPEED: 20
+        MAX_FALL_SPEED: 8
     },
     
     // Colors

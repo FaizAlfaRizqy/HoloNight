@@ -112,28 +112,28 @@ class Enemy {
             this.updateDeathAnimation();
             return;
         }
-        
+
         // Update AI
         this.updateAI(player);
-        
+
         // Apply movement based on type
         if (this.type === 'boofly') {
             this.updateFlyingMovement();
         } else {
             this.applyGravity();
         }
-        
-        // Move
-        this.x += this. velocityX * deltaTime;
-        this.y += this.velocityY * deltaTime;
-        
+
+        // Movement update tanpa dikali deltaTime
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+
         // Collision checks
         if (this.type !== 'boofly') {
             this.checkGroundCollision();
         }
         this.constrainToCanvas();
         this.checkPlayerCollision(player);
-        
+
         // Update animation
         this.updateAnimation();
     }

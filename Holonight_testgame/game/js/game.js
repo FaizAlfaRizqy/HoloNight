@@ -601,16 +601,15 @@ function saveScore() {
 // MAIN GAME LOOP
 // =============================================================================
 function gameLoop() {
-    const currentTime = Date.now();
-    const deltaTime = (currentTime - lastTime) / 16.67; // Normalize to 60fps
-    lastTime = currentTime;
-    
+    // Gunakan deltaTime = 1 per frame agar kecepatan game normal
+    const deltaTime = 1;
+
     // Update
     update(deltaTime);
-    
+
     // Draw
     draw();
-    
+
     // Continue loop
     requestAnimationFrame(gameLoop);
 }
