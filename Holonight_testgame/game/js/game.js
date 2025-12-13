@@ -104,42 +104,13 @@ async function loadAssets() {
         const img = await loadImage(`../src/game/crawlid/walk/crawlid_0${i}.png`);
         Assets.enemies.crawlid.walk.push(img);
     }
-
-    // Crawlid Die Animation (3 frames)
+    
+    // Crawlid Die Animation (check how many frames exist)
     for (let i = 1; i <= 3; i++) {
         const img = await loadImage(`../src/game/crawlid/die/die_0${i}.png`);
         if (img) Assets.enemies.crawlid.die.push(img);
     }
-
-    // Boofly Fly Animation (5 frames)
-    for (let i = 1; i <= 5; i++) {
-        const img = await loadImage(`../src/game/boofly/fly/fly_0${i}.png`);
-        Assets.enemies.boofly.fly.push(img);
-    }
-
-    // Boofly Die Animation (3 frames)
-    for (let i = 1; i <= 3; i++) {
-        const img = await loadImage(`../src/game/boofly/die/die_0${i}.png`);
-        if (img) Assets.enemies.boofly.die.push(img);
-    }
-
-    // Boss Idle Animation (5 frames)
-    Assets.enemies.boss = { idle: [], attack: [], die: [] };
-    for (let i = 1; i <= 5; i++) {
-        const img = await loadImage(`../src/game/boss/idle/idle_0${i}.png`);
-        Assets.enemies.boss.idle.push(img);
-    }
-
-    // Boss Attack Animation (3 frames, misal)
-    for (let i = 1; i <= 3; i++) {
-        const img = await loadImage(`../src/game/boss/attack/attack_0${i}.png`);
-        Assets.enemies.boss.attack.push(img);
-    }
-
-    // Boss Die Animation (1 frame, fallback)
-    const bossDie = await loadImage(`../src/game/boss/die/die_01.png`);
-    if (bossDie) Assets.enemies.boss.die.push(bossDie);
-
+    
     // Environment
     Assets.environment.background = await loadImage(`../src/game/background.webp`);
     Assets.environment.foreground = await loadImage(`../src/game/foreground/foreground.png`);
@@ -236,32 +207,21 @@ function startWave(waveNumber) {
     );
     
     // Check if boss wave
-    const isBossWave = (waveNumber % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0);
+    const isBossWave = (waveNumber % 5 === 0);
+    
     if (isBossWave) {
         console.log("💀 BOSS WAVE!");
-        waveManager.enemiesRequired = 1; // Only 1 boss
+        // TODO: Spawn boss when boss assets ready
+        // For now, spawn stronger enemies
+        waveManager.enemiesRequired = Math.ceil(waveManager.enemiesRequired / 2);
     }
     
     console.log(`👾 Enemies to spawn: ${waveManager.enemiesRequired}`);
     
     // Reset spawn timer
-    waveManager.spawnTimer = 0;
+    waveManager. spawnTimer = 0;
     waveManager.isTransitioning = false;
-
-
-    // Staged enemy spawning: 3-second delay, then spawn 3 at a time every 3 seconds
-    waveManager.stagedSpawn = {
-        initialDelay: 180, // 3 seconds at 60fps
-        batchDelay: 180,   // 3 seconds at 60fps
-        batchSize: 3,
-        timer: 0,
-        state: 'waiting', // 'waiting', 'spawning', 'done'
-    };
-    waveManager.stagedSpawn.timer = waveManager.stagedSpawn.initialDelay;
-
-    // No enemies spawned at start
-    // Enemies will be spawned in update loop
-
+    
     // Update UI
     updateUI();
 }
@@ -270,30 +230,19 @@ function spawnEnemy() {
     if (waveManager.enemiesSpawned >= waveManager.enemiesRequired) {
         return;
     }
-    // Random spawn position, not near player
-    const minDistanceFromPlayer = 120;
-    let spawnX;
-    let attempts = 0;
-    do {
-        const spawnMargin = CONFIG.ENEMY.SPAWN_MARGIN;
-        spawnX = spawnMargin + Math.random() * (CONFIG.CANVAS.WIDTH - spawnMargin * 2);
-        attempts++;
-    } while (Math.abs(spawnX - player.x) < minDistanceFromPlayer && attempts < 20);
-    const spawnY = 200;
-    // Tentukan tipe musuh sesuai wave
-    let enemyType = CONFIG.ENEMY_TYPES.getTypeForWave(waveManager.currentWave);
-    // Paksa boss jika boss wave
-    if (waveManager.currentWave % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0) {
-        enemyType = 'boss';
-    }
-    const enemy = new Enemy(spawnX, spawnY, waveManager.currentWave, enemyType);
+    
+    // Random spawn position
+    const spawnMargin = CONFIG.ENEMY.SPAWN_MARGIN;
+    const spawnX = spawnMargin + Math.random() * (CONFIG.CANVAS.WIDTH - spawnMargin * 2);
+    const spawnY = 200; // Will fall to ground
+    
+    // Create enemy
+    const enemy = new Enemy(spawnX, spawnY, waveManager.currentWave);
     enemies.push(enemy);
+    
     waveManager.enemiesSpawned++;
-    if (enemyType === 'boss') {
-        console.log('👑 Boss spawned!');
-    } else {
-        console.log(`👾 Spawned enemy ${waveManager.enemiesSpawned}/${waveManager.enemiesRequired}`);
-    }
+    
+    console.log(`👾 Spawned enemy ${waveManager.enemiesSpawned}/${waveManager.enemiesRequired}`);
 }
 
 function checkWaveComplete() {
@@ -307,25 +256,16 @@ function checkWaveComplete() {
 }
 
 function waveComplete() {
-    console.log(`✅ Wave ${waveManager.currentWave} Complete!`);
-
+    console.log(`✅ Wave ${waveManager. currentWave} Complete!`);
+    
     // Add wave bonus
     const waveBonus = CONFIG.SCORE.WAVE_COMPLETE;
     score += waveBonus;
-
-    // Hapus semua musuh yang sudah mati dari array enemies
-    enemies = enemies.filter(enemy => !enemy.isDead);
-
-    // Jika boss wave, reward: full heal
-    if (waveManager.currentWave % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0) {
-        player.hp = player.maxHp;
-        console.log('🎁 Boss defeated! Player fully healed!');
-    }
-
+    
     // Start transition
     waveManager.isTransitioning = true;
     waveManager.transitionTimer = 120; // 2 seconds at 60fps
-
+    
     // Show wave complete message
     showWaveTransition();
 }
@@ -349,7 +289,17 @@ function updateWaveTransition(deltaTime) {
 // =============================================================================
 // ENEMY SPAWNING SYSTEM
 // =============================================================================
-// updateSpawning tidak diperlukan lagi, spawn musuh langsung di startWave
+function updateSpawning(deltaTime) {
+    if (waveManager.isTransitioning) return;
+    if (waveManager.enemiesSpawned >= waveManager.enemiesRequired) return;
+    
+    waveManager.spawnTimer += deltaTime;
+    
+    if (waveManager.spawnTimer >= waveManager.spawnDelay) {
+        spawnEnemy();
+        waveManager.spawnTimer = 0;
+    }
+}
 
 // =============================================================================
 // COLLISION DETECTION
@@ -415,33 +365,8 @@ function update(deltaTime) {
     checkPlayerAttackCollisions();
     
     // Update wave system
+    updateSpawning(deltaTime);
     updateWaveTransition(deltaTime);
-
-    // Handle staged enemy spawning
-    if (typeof waveManager.stagedSpawn !== 'undefined' && waveManager.stagedSpawn) {
-        const s = waveManager.stagedSpawn;
-        if (s.state === 'waiting') {
-            s.timer -= deltaTime;
-            if (s.timer <= 0) {
-                s.state = 'spawning';
-                s.timer = 0;
-            }
-        }
-        if (s.state === 'spawning') {
-            // Spawn up to batchSize enemies
-            let toSpawn = Math.min(s.batchSize, waveManager.enemiesRequired - waveManager.enemiesSpawned);
-            for (let i = 0; i < toSpawn; i++) {
-                spawnEnemy();
-            }
-            if (waveManager.enemiesSpawned >= waveManager.enemiesRequired) {
-                s.state = 'done';
-            } else {
-                s.state = 'waiting';
-                s.timer = s.batchDelay;
-            }
-        }
-    }
-
     checkWaveComplete();
     
     // Check game over
@@ -676,15 +601,16 @@ function saveScore() {
 // MAIN GAME LOOP
 // =============================================================================
 function gameLoop() {
-    // Gunakan deltaTime = 1 per frame agar kecepatan game normal
-    const deltaTime = 1;
-
+    const currentTime = Date.now();
+    const deltaTime = (currentTime - lastTime) / 16.67; // Normalize to 60fps
+    lastTime = currentTime;
+    
     // Update
     update(deltaTime);
-
+    
     // Draw
     draw();
-
+    
     // Continue loop
     requestAnimationFrame(gameLoop);
 }

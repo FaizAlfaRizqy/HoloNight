@@ -17,7 +17,7 @@ class Player {
         this.isFacingRight = true;
         
         // Jump
-        this.jumpPower = CONFIG.PLAYER.JUMP_POWER;
+        this.jumpPower = CONFIG.PLAYER. JUMP_POWER;
         this.gravity = CONFIG.PLAYER.GRAVITY;
         this.canJump = true;
         
@@ -50,13 +50,12 @@ class Player {
         window.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
             this.keys[e.code] = true;
-
+            
             if (e.key === 'ArrowLeft') this.isFacingRight = false;
-            if (e.key === 'ArrowRight') this.isFacingRight = true;
-            // Prevent default for X (jump) and Z (attack) if needed
-            if (e.key.toLowerCase() === 'x' || e.key.toLowerCase() === 'z') e.preventDefault();
+            if (e. key === 'ArrowRight') this.isFacingRight = true;
+            if (e.key === ' ' || e.code === 'Space') e.preventDefault();
         });
-
+        
         window.addEventListener('keyup', (e) => {
             this.keys[e.key] = false;
             this.keys[e.code] = false;
@@ -69,21 +68,20 @@ class Player {
         this.handleAttack();
         this.applyGravity();
         this.updateAnimation();
-
-        // Movement update tanpa dikali deltaTime agar jump terasa natural
-        this.x += this.velocityX;
-        this.y += this.velocityY;
-
+        
+        this.x += this.velocityX * deltaTime;
+        this.y += this.velocityY * deltaTime;
+        
         this.checkPlatformCollision();
         this.constrainToCanvas();
-
+        
         if (this.isInvincible) {
             this.invincibleTimer -= deltaTime;
             if (this.invincibleTimer <= 0) {
                 this.isInvincible = false;
             }
         }
-
+        
         if (this.isAttacking) {
             if (Date.now() - this.attackStartTime > this.attackDuration) {
                 this.isAttacking = false;
@@ -107,24 +105,22 @@ class Player {
     }
     
     handleJump() {
-        // X = lompat
-        if ((this.keys['x'] || this.keys['X']) && this.isOnGround && this.canJump) {
+        if ((this.keys[' '] || this.keys['Space'] || this.keys['ArrowUp'] || this.keys['w'] || this.keys['W']) && this.isOnGround && this.canJump) {
             this.velocityY = -this.jumpPower;
             this.isOnGround = false;
             this.canJump = false;
         }
-
-        if (!this.keys['x'] && !this.keys['X']) {
+        
+        if (! this.keys[' '] && !this.keys['Space']) {
             this.canJump = true;
         }
     }
     
     handleAttack() {
-        // Z = attack
         const currentTime = Date.now();
         const cooldownPassed = currentTime - this.lastAttackTime > CONFIG.PLAYER.ATTACK_COOLDOWN;
-
-        if ((this.keys['z'] || this.keys['Z']) && !this.isAttacking && cooldownPassed) {
+        
+        if ((this.keys['f'] || this.keys['F']) && !this.isAttacking && cooldownPassed) {
             this.isAttacking = true;
             this.state = 'attack';
             this.attackStartTime = currentTime;
@@ -146,23 +142,14 @@ class Player {
     }
     
     checkPlatformCollision() {
-        // Pastikan platforms tersedia di global scope
-        if (typeof platforms === 'undefined') return;
-
-        this.isOnGround = false;
-        // Cek collision dengan semua platform
-        for (let platform of platforms) {
-            // Cek hanya dari atas (player jatuh ke platform)
-            const prevBottom = this.y + this.height - this.velocityY; // posisi sebelum update
-            const currBottom = this.y + this.height;
-            const onTop = prevBottom <= platform.y && currBottom >= platform.y;
-            const withinX = this.x + this.width > platform.x && this.x < platform.x + platform.width;
-            if (onTop && withinX && this.velocityY >= 0) {
-                this.y = platform.y - this.height;
-                this.velocityY = 0;
-                this.isOnGround = true;
-                break;
-            }
+        const groundY = CONFIG.PHYSICS.GROUND_Y;
+        
+        if (this.y + this.height >= groundY) {
+            this. y = groundY - this.height;
+            this.velocityY = 0;
+            this. isOnGround = true;
+        } else {
+            this.isOnGround = false;
         }
     }
     

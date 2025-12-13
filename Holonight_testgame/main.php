@@ -127,6 +127,147 @@ $user = getCurrentUser();
         </div>
     </section>
 
+    <!-- Heroes Section -->
+    <section class="heroes-section">
+        <img src="src/img/heroes.png" alt="Heroes" class="heroes-image">
+    </section>
+
+    <!-- Character Info Section -->
+    <section class="character-info-section">
+        <img src="src/img/CharIntro.png" alt="Character Intro Background" class="char-intro-bg">
+        
+        <div class="character-content">
+            <div class="textbox-wrapper">
+                <img src="src/img/HornetPrev.png" alt="Character Preview" class="character-preview" id="charPreview">
+                <img src="src/img/textboox.png" alt="Text Box" class="textbox-bg">
+                <div class="character-text" id="charText">
+                    <h2 id="charTitle">myHornet</h2>
+                    <p id="charDesc1">Hornet is the mysterious princess-protector of Hallownest's ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.</p>
+                    <p id="charDesc2">Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.</p>
+                </div>
+            </div>
+            
+            <div class="character-bottom">
+                <img src="src/img/ZaHornet.png" alt="Character" class="character-main" id="charMain">
+                
+                <!-- Character Attributes -->
+                <div class="character-attributes">
+                    <button class="attr-arrow attr-left" id="charPrevBtn">
+                        <img src="src/img/left.png" alt="Previous">
+                    </button>
+                    <div class="attr-logo" data-char="0">
+                        <img src="src/img/HorNaitLgo.png" alt="Hornet Logo">
+                    </div>
+                    <div class="attr-logo" data-char="1">
+                        <img src="src/img/NaitLgo.png" alt="Knight Logo">
+                    </div>
+                    <button class="attr-arrow attr-right" id="charNextBtn">
+                        <img src="src/img/right.png" alt="Next">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- All Characters Title Section -->
+    <section class="all-characters-section">
+        <h2 class="diagonal-title">All Characters</h2>
+        <img src="src/img/line1.png" alt="Separator" class="diagonal-separator">
+    </section>
+
+    <!-- Diagonal Slider Section -->
+    <section class="diagonal-slider-section">
+        <div class="diagonal-slider-container">
+            <!-- Slider 1 -->
+            <div class="diagonal-column" data-direction="down">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+            </div>
+            <!-- Slider 2 -->
+            <div class="diagonal-column" data-direction="up">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+            </div>
+            <!-- Slider 3 -->
+            <div class="diagonal-column" data-direction="down">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+            </div>
+            <!-- Slider 4 -->
+            <div class="diagonal-column" data-direction="up">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+            </div>
+            <!-- Slider 5 -->
+            <div class="diagonal-column" data-direction="down">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+            </div>
+            <!-- Slider 6 -->
+            <div class="diagonal-column" data-direction="up">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+            </div>
+            <!-- Slider 7 -->
+            <div class="diagonal-column" data-direction="down">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+            </div>
+            <!-- Slider 8 -->
+            <div class="diagonal-column" data-direction="up">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <h3>Hollow Knight</h3>
+                <p>&copy; 2024 Team Cherry. All rights reserved.</p>
+            </div>
+            <div class="footer-right">
+                <a href="main.php" class="footer-link">Home</a>
+                <a href="leaderboard.php" class="footer-link">Leaderboard</a>
+                <a href="game/game.php" class="footer-link">Play Game</a>
+            </div>
+        </div>
+    </footer>
+
     <audio id="bgMusic" loop>
         <source src="src/music/CityOfTears.mp3" type="audio/mpeg">
     </audio>
@@ -182,6 +323,80 @@ $user = getCurrentUser();
             currentIndex = (currentIndex - 1 + carouselSlides.length) % carouselSlides.length;
             showSlide(currentIndex);
         });
+
+        // Character carousel data
+        const characterData = [
+            {
+                preview: 'src/img/HornetPrev.png',
+                main: 'src/img/ZaHornet.png',
+                title: 'myHornet',
+                desc1: 'Hornet is the mysterious princess-protector of Hallownest\'s ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.',
+                desc2: 'Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.'
+            },
+            {
+                preview: 'src/img/NightSit.gif',
+                main: 'src/img/NightSit.gif',
+                title: 'The Knight',
+                desc1: 'The Knight is a discarded Vessel. They are the child of the Pale King and the White Lady, born in the Abyss with Void inside their shell. Hornet is the Knight\'s sister through their shared father.',
+                desc2: 'The Knight was one of many vessels created to contain the Radiance and seal the Infection. After being discarded, they eventually returned to Hallownest to face their destiny and discover the truth of their origin.'
+            }
+        ];
+
+        let currentCharIndex = 0;
+
+        // Update character display
+        function updateCharacter(index) {
+            const char = characterData[index];
+            
+            // Update images with fade effect
+            const charPreview = document.getElementById('charPreview');
+            const charMain = document.getElementById('charMain');
+            
+            charPreview.style.opacity = '0';
+            charMain.style.opacity = '0';
+            
+            setTimeout(() => {
+                charPreview.src = char.preview;
+                charMain.src = char.main;
+                charPreview.alt = char.title + ' Preview';
+                charMain.alt = char.title;
+                
+                charPreview.style.opacity = '1';
+                charMain.style.opacity = '1';
+            }, 300);
+            
+            // Update text
+            document.getElementById('charTitle').textContent = char.title;
+            document.getElementById('charDesc1').textContent = char.desc1;
+            document.getElementById('charDesc2').textContent = char.desc2;
+            
+            // Update active logo
+            document.querySelectorAll('.attr-logo').forEach((logo, i) => {
+                logo.classList.toggle('active', i === index);
+            });
+        }
+
+        // Character navigation buttons
+        document.getElementById('charPrevBtn').addEventListener('click', () => {
+            currentCharIndex = (currentCharIndex - 1 + characterData.length) % characterData.length;
+            updateCharacter(currentCharIndex);
+        });
+
+        document.getElementById('charNextBtn').addEventListener('click', () => {
+            currentCharIndex = (currentCharIndex + 1) % characterData.length;
+            updateCharacter(currentCharIndex);
+        });
+
+        // Logo click navigation
+        document.querySelectorAll('.attr-logo').forEach((logo, index) => {
+            logo.addEventListener('click', () => {
+                currentCharIndex = index;
+                updateCharacter(currentCharIndex);
+            });
+        });
+
+        // Initialize first character
+        updateCharacter(0);
     </script>
 </body>
 </html>

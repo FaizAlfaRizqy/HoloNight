@@ -14,9 +14,9 @@ const CONFIG = {
     PLAYER: {
         WIDTH: 50,
         HEIGHT: 70,
-        SPEED: 2.2,         // Lebih natural untuk per frame
-        JUMP_POWER: 10,    // Lebih natural untuk per frame
-        GRAVITY: 0.32,      // Lebih natural untuk per frame
+        SPEED: 6,
+        JUMP_POWER: 15,
+        GRAVITY: 0.6,
         MAX_HP: 100,
         ATTACK_DAMAGE: 25,
         ATTACK_RANGE: 80,
@@ -30,14 +30,14 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 45,
         HEIGHT: 60,
-        BASE_SPEED: 0.3,    // Lebih natural untuk per frame
+        BASE_SPEED: 2,
         BASE_HP: 50,
         BASE_DAMAGE: 10,
         COLOR: '#ff4757',
         SPAWN_MARGIN: 150,
         PATROL_RANGE: 150,
         CHASE_RANGE: 250,
-        CHASE_SPEED_MULTIPLIER: 1.2,
+        CHASE_SPEED_MULTIPLIER: 1.5,
         TOUCH_DAMAGE_COOLDOWN: 1000
     },
     
@@ -65,7 +65,7 @@ const CONFIG = {
     PHYSICS: {
         GROUND_Y: 520,
         GROUND_HEIGHT: 80,
-        MAX_FALL_SPEED: 8
+        MAX_FALL_SPEED: 20
     },
     
     // Colors
@@ -126,11 +126,7 @@ const CONFIG = {
                 FLY: '../src/game/boofly/fly/',
                 DIE: '../src/game/boofly/die/'
             },
-            BOSS: {
-                IDLE: '../src/game/boss/idle/',
-                ATTACK: '../src/game/boss/attack/',
-                DIE: '../src/game/boss/die/'
-            }
+            BOSS: '../src/game/boss/'
         },
         ENVIRONMENT: {
             BACKGROUND: '../src/game/background. webp',
