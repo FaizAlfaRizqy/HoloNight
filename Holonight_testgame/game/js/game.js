@@ -219,9 +219,25 @@ function startWave(waveNumber) {
     console.log(`👾 Enemies to spawn: ${waveManager.enemiesRequired}`);
     
     // Reset spawn timer
-    waveManager. spawnTimer = 0;
+    waveManager.spawnTimer = 0;
     waveManager.isTransitioning = false;
-    
+
+    // Spawn all enemies at once, not near player
+    const minDistanceFromPlayer = 120;
+    for (let i = 0; i < waveManager.enemiesRequired; i++) {
+        let spawnX;
+        let attempts = 0;
+        do {
+            const spawnMargin = CONFIG.ENEMY.SPAWN_MARGIN;
+            spawnX = spawnMargin + Math.random() * (CONFIG.CANVAS.WIDTH - spawnMargin * 2);
+            attempts++;
+        } while (Math.abs(spawnX - player.x) < minDistanceFromPlayer && attempts < 20);
+        const spawnY = 200;
+        const enemy = new Enemy(spawnX, spawnY, waveManager.currentWave);
+        enemies.push(enemy);
+        waveManager.enemiesSpawned++;
+    }
+
     // Update UI
     updateUI();
 }
@@ -289,17 +305,7 @@ function updateWaveTransition(deltaTime) {
 // =============================================================================
 // ENEMY SPAWNING SYSTEM
 // =============================================================================
-function updateSpawning(deltaTime) {
-    if (waveManager.isTransitioning) return;
-    if (waveManager.enemiesSpawned >= waveManager.enemiesRequired) return;
-    
-    waveManager.spawnTimer += deltaTime;
-    
-    if (waveManager.spawnTimer >= waveManager.spawnDelay) {
-        spawnEnemy();
-        waveManager.spawnTimer = 0;
-    }
-}
+// updateSpawning tidak diperlukan lagi, spawn musuh langsung di startWave
 
 // =============================================================================
 // COLLISION DETECTION
@@ -365,7 +371,6 @@ function update(deltaTime) {
     checkPlayerAttackCollisions();
     
     // Update wave system
-    updateSpawning(deltaTime);
     updateWaveTransition(deltaTime);
     checkWaveComplete();
     

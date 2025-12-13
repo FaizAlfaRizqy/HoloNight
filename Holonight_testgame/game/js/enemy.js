@@ -30,7 +30,12 @@ class Enemy {
         this.aiState = 'patrol'; // 'patrol', 'chase', 'attack'
         this.patrolStartX = x;
         this.patrolRange = CONFIG.ENEMY.PATROL_RANGE;
-        this. chaseRange = CONFIG.ENEMY.CHASE_RANGE;
+        // Dua batas patrol
+        this.patrolMinX = this.patrolStartX - this.patrolRange;
+        this.patrolMaxX = this.patrolStartX + this.patrolRange;
+        this.patrolMinX = Math.max(0, this.patrolMinX);
+        this.patrolMaxX = Math.min(CONFIG.CANVAS.WIDTH - this.width, this.patrolMaxX);
+        this.chaseRange = CONFIG.ENEMY.CHASE_RANGE;
         
         // Animation
         this.currentFrame = 0;
@@ -151,22 +156,26 @@ class Enemy {
     }
     
     patrol() {
-        const distanceFromStart = Math.abs(this.x - this.patrolStartX);
-        
-        if (distanceFromStart >= this.patrolRange) {
-            this.velocityX = -this.velocityX;
-            this.isFacingRight = this.velocityX > 0;
+        // Enemy bolak-balik antara patrolMinX dan patrolMaxX
+        if (this.velocityX > 0 && this.x >= this.patrolMaxX) {
+            this.x = this.patrolMaxX;
+            this.velocityX = -Math.abs(this.speed);
+        } else if (this.velocityX < 0 && this.x <= this.patrolMinX) {
+            this.x = this.patrolMinX;
+            this.velocityX = Math.abs(this.speed);
         }
+        // Selalu update arah sesuai velocityX
+        this.isFacingRight = this.velocityX > 0;
     }
     
     chase(player) {
         if (player.x < this.x) {
             this.velocityX = -this.speed * CONFIG.ENEMY.CHASE_SPEED_MULTIPLIER;
-            this.isFacingRight = false;
         } else {
-            this.velocityX = this.speed * CONFIG.ENEMY. CHASE_SPEED_MULTIPLIER;
-            this.isFacingRight = true;
+            this.velocityX = this.speed * CONFIG.ENEMY.CHASE_SPEED_MULTIPLIER;
         }
+        // Selalu update arah sesuai velocityX
+        this.isFacingRight = this.velocityX > 0;
     }
     
     updateFlyingMovement() {
@@ -243,7 +252,7 @@ class Enemy {
         
         if (this.hp <= 0) {
             this.hp = 0;
-            this. isDead = true;
+            this.isDead = true;
             this.state = 'die';
             this.currentFrame = 0;
             this.frameCounter = 0;
@@ -291,22 +300,24 @@ class Enemy {
             // Fade out after death animation
             return;
         }
-        
+
         ctx.save();
-        
+
         // Flip sprite based on direction
-        if (!this.isFacingRight) {
+        if (this.isFacingRight) {
+            // Menghadap kanan (default), tidak di-flip
+            ctx.translate(this.x, this.y);
+        } else {
+            // Menghadap kiri, flip horizontal
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
-        } else {
-            ctx.translate(this.x, this.y);
         }
-        
+
         // Draw sprite based on type and state
         this.drawSprite(ctx);
-        
+
         ctx.restore();
-        
+
         // Draw HP bar (only if alive)
         if (!this.isDead) {
             this.drawHealthBar(ctx);
