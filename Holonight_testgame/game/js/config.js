@@ -30,14 +30,14 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 45,
         HEIGHT: 60,
-        BASE_SPEED: 1.2,    // Lebih natural untuk per frame
+        BASE_SPEED: 0.3,    // Lebih natural untuk per frame
         BASE_HP: 50,
         BASE_DAMAGE: 10,
         COLOR: '#ff4757',
         SPAWN_MARGIN: 150,
         PATROL_RANGE: 150,
         CHASE_RANGE: 250,
-        CHASE_SPEED_MULTIPLIER: 1.5,
+        CHASE_SPEED_MULTIPLIER: 1.2,
         TOUCH_DAMAGE_COOLDOWN: 1000
     },
     
@@ -126,7 +126,11 @@ const CONFIG = {
                 FLY: '../src/game/boofly/fly/',
                 DIE: '../src/game/boofly/die/'
             },
-            BOSS: '../src/game/boss/'
+            BOSS: {
+                IDLE: '../src/game/boss/idle/',
+                ATTACK: '../src/game/boss/attack/',
+                DIE: '../src/game/boss/die/'
+            }
         },
         ENVIRONMENT: {
             BACKGROUND: '../src/game/background. webp',

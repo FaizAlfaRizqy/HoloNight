@@ -329,27 +329,31 @@ class Enemy {
         // Try to load sprite from Assets global object
         if (typeof Assets !== 'undefined' && Assets.enemies) {
             let spriteArray = null;
-            
             if (this.type === 'crawlid') {
                 spriteArray = this.state === 'die' ? 
                     Assets.enemies.crawlid.die : 
                     Assets.enemies.crawlid.walk;
             } else if (this.type === 'boofly') {
                 spriteArray = this.state === 'die' ?  
-                    Assets.enemies. boofly.die : 
-                    Assets.enemies.boofly. fly;
+                    Assets.enemies.boofly.die : 
+                    Assets.enemies.boofly.fly;
+            } else if (this.type === 'boss') {
+                if (this.state === 'die') {
+                    spriteArray = Assets.enemies.boss.die;
+                } else if (this.state === 'attack') {
+                    spriteArray = Assets.enemies.boss.attack;
+                } else {
+                    spriteArray = Assets.enemies.boss.idle;
+                }
             }
-            
             if (spriteArray && spriteArray.length > 0) {
                 const sprite = spriteArray[this.currentFrame % spriteArray.length];
-                
                 if (sprite && sprite.complete) {
-                    ctx.drawImage(sprite, 0, 0, this.width, this. height);
+                    ctx.drawImage(sprite, 0, 0, this.width, this.height);
                     return;
                 }
             }
         }
-        
         // Fallback:  Draw colored rectangle
         this.drawFallbackSprite(ctx);
     }
