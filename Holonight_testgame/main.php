@@ -22,7 +22,7 @@ $user = getCurrentUser();
         <div class="nav-container">
             <a href="main.php" class="nav-link active">HOME</a>
             <a href="leaderboard.php" class="nav-link">LEADERBOARD</a>
-            <a href="#" class="nav-link">HOW TO PLAY</a>
+            <a href="howtoplay.php" class="nav-link">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>
         </div>
     </nav>
@@ -138,7 +138,7 @@ $user = getCurrentUser();
         
         <div class="character-content">
             <div class="textbox-wrapper">
-                <img src="src/img/HornetPrev.png" alt="Character Preview" class="character-preview" id="charPreview">
+                <video src="src/vid/HorNeitPrev.mp4" autoplay loop muted playsinline class="character-preview" id="charPreview"></video>
                 <img src="src/img/textboox.png" alt="Text Box" class="textbox-bg">
                 <div class="character-text" id="charText">
                     <h2 id="charTitle">myHornet</h2>
@@ -185,7 +185,7 @@ $user = getCurrentUser();
                 <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
                 <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
                 <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
-                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character " class="diagonal-image">
             </div>
             <!-- Slider 2 -->
             <div class="diagonal-column" data-direction="up">
@@ -200,55 +200,55 @@ $user = getCurrentUser();
             <div class="diagonal-column" data-direction="down">
                 <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
                 <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
-                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal9.png" alt="Character 9" class="diagonal-image">
                 <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
                 <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
-                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
+                <img src="src/img/diagonal9.png" alt="Character 9" class="diagonal-image">
             </div>
             <!-- Slider 4 -->
             <div class="diagonal-column" data-direction="up">
-                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
-                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
-                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
-                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
-                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
-                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
+                <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
+                <img src="src/img/diagonal11.png" alt="Character 11" class="diagonal-image">
+                <img src="src/img/diagonal12.png" alt="Character 12" class="diagonal-image">
+                <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
+                <img src="src/img/diagonal11.png" alt="Character 11" class="diagonal-image">
+                <img src="src/img/diagonal12.png" alt="Character 12" class="diagonal-image">
             </div>
             <!-- Slider 5 -->
             <div class="diagonal-column" data-direction="down">
-                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
-                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
-                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
-                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
-                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
-                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
+                <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
+                <img src="src/img/diagonal14.png" alt="Character 14" class="diagonal-image">
+                <img src="src/img/diagonal15.png" alt="Character 15" class="diagonal-image">
+                <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
+                <img src="src/img/diagonal14.png" alt="Character 14" class="diagonal-image">
+                <img src="src/img/diagonal15.png" alt="Character 15" class="diagonal-image">
             </div>
             <!-- Slider 6 -->
             <div class="diagonal-column" data-direction="up">
-                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
-                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
-                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
-                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
-                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
-                <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
+                <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
+                <img src="src/img/diagonal17.png" alt="Character 17" class="diagonal-image">
+                <img src="src/img/diagonal18.png" alt="Character 18" class="diagonal-image">
+                <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
+                <img src="src/img/diagonal17.png" alt="Character 17" class="diagonal-image">
+                <img src="src/img/diagonal18.png" alt="Character 18" class="diagonal-image">
             </div>
             <!-- Slider 7 -->
             <div class="diagonal-column" data-direction="down">
-                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
-                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
-                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
-                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
-                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
-                <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
+                <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
+                <img src="src/img/diagonal20.png" alt="Character 20" class="diagonal-image">
+                <img src="src/img/diagonal21.png" alt="Character 21" class="diagonal-image">
+                <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
+                <img src="src/img/diagonal20.png" alt="Character 20" class="diagonal-image">
+                <img src="src/img/diagonal21.png" alt="Character 21" class="diagonal-image">
             </div>
             <!-- Slider 8 -->
             <div class="diagonal-column" data-direction="up">
-                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
-                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
-                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
-                <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
-                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
-                <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
+                <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
+                <img src="src/img/diagonal23.png" alt="Character 23" class="diagonal-image">
+                <img src="src/img/diagonal24.png" alt="Character 24" class="diagonal-image">
+                <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
+                <img src="src/img/diagonal23.png" alt="Character 23" class="diagonal-image">
+                <img src="src/img/diagonal24.png" alt="Character 24" class="diagonal-image">
             </div>
         </div>
     </section>
@@ -327,14 +327,14 @@ $user = getCurrentUser();
         // Character carousel data
         const characterData = [
             {
-                preview: 'src/img/HornetPrev.png',
+                preview: 'src/vid/HorNeitPrev.mp4',
                 main: 'src/img/ZaHornet.png',
                 title: 'myHornet',
                 desc1: 'Hornet is the mysterious princess-protector of Hallownest\'s ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.',
                 desc2: 'Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.'
             },
             {
-                preview: 'src/img/NightSit.gif',
+                preview: 'src/vid/NaitPrev.mp4',
                 main: 'src/img/NightSit.gif',
                 title: 'The Knight',
                 desc1: 'The Knight is a discarded Vessel. They are the child of the Pale King and the White Lady, born in the Abyss with Void inside their shell. Hornet is the Knight\'s sister through their shared father.',
