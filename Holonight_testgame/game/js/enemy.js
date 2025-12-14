@@ -30,7 +30,12 @@ class Enemy {
         this.aiState = 'patrol'; // 'patrol', 'chase', 'attack'
         this.patrolStartX = x;
         this.patrolRange = CONFIG.ENEMY.PATROL_RANGE;
-        this. chaseRange = CONFIG.ENEMY.CHASE_RANGE;
+        // Dua batas patrol
+        this.patrolMinX = this.patrolStartX - this.patrolRange;
+        this.patrolMaxX = this.patrolStartX + this.patrolRange;
+        this.patrolMinX = Math.max(0, this.patrolMinX);
+        this.patrolMaxX = Math.min(CONFIG.CANVAS.WIDTH - this.width, this.patrolMaxX);
+        this.chaseRange = CONFIG.ENEMY.CHASE_RANGE;
         
         // Animation
         this.currentFrame = 0;
@@ -112,28 +117,28 @@ class Enemy {
             this.updateDeathAnimation();
             return;
         }
-        
+
         // Update AI
         this.updateAI(player);
-        
+
         // Apply movement based on type
         if (this.type === 'boofly') {
             this.updateFlyingMovement();
         } else {
             this.applyGravity();
         }
-        
-        // Move
-        this.x += this. velocityX * deltaTime;
-        this.y += this.velocityY * deltaTime;
-        
+
+        // Movement update tanpa dikali deltaTime
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+
         // Collision checks
         if (this.type !== 'boofly') {
             this.checkGroundCollision();
         }
         this.constrainToCanvas();
         this.checkPlayerCollision(player);
-        
+
         // Update animation
         this.updateAnimation();
     }
@@ -151,22 +156,26 @@ class Enemy {
     }
     
     patrol() {
-        const distanceFromStart = Math.abs(this.x - this.patrolStartX);
-        
-        if (distanceFromStart >= this.patrolRange) {
-            this.velocityX = -this.velocityX;
-            this.isFacingRight = this.velocityX > 0;
+        // Enemy bolak-balik antara patrolMinX dan patrolMaxX
+        if (this.velocityX > 0 && this.x >= this.patrolMaxX) {
+            this.x = this.patrolMaxX;
+            this.velocityX = -Math.abs(this.speed);
+        } else if (this.velocityX < 0 && this.x <= this.patrolMinX) {
+            this.x = this.patrolMinX;
+            this.velocityX = Math.abs(this.speed);
         }
+        // Selalu update arah sesuai velocityX
+        this.isFacingRight = this.velocityX > 0;
     }
     
     chase(player) {
         if (player.x < this.x) {
             this.velocityX = -this.speed * CONFIG.ENEMY.CHASE_SPEED_MULTIPLIER;
-            this.isFacingRight = false;
         } else {
-            this.velocityX = this.speed * CONFIG.ENEMY. CHASE_SPEED_MULTIPLIER;
-            this.isFacingRight = true;
+            this.velocityX = this.speed * CONFIG.ENEMY.CHASE_SPEED_MULTIPLIER;
         }
+        // Selalu update arah sesuai velocityX
+        this.isFacingRight = this.velocityX > 0;
     }
     
     updateFlyingMovement() {
@@ -243,7 +252,7 @@ class Enemy {
         
         if (this.hp <= 0) {
             this.hp = 0;
-            this. isDead = true;
+            this.isDead = true;
             this.state = 'die';
             this.currentFrame = 0;
             this.frameCounter = 0;
@@ -291,22 +300,24 @@ class Enemy {
             // Fade out after death animation
             return;
         }
-        
+
         ctx.save();
-        
+
         // Flip sprite based on direction
-        if (!this.isFacingRight) {
+        if (this.isFacingRight) {
+            // Menghadap kanan (default), tidak di-flip
+            ctx.translate(this.x, this.y);
+        } else {
+            // Menghadap kiri, flip horizontal
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
-        } else {
-            ctx.translate(this.x, this.y);
         }
-        
+
         // Draw sprite based on type and state
         this.drawSprite(ctx);
-        
+
         ctx.restore();
-        
+
         // Draw HP bar (only if alive)
         if (!this.isDead) {
             this.drawHealthBar(ctx);
@@ -318,27 +329,31 @@ class Enemy {
         // Try to load sprite from Assets global object
         if (typeof Assets !== 'undefined' && Assets.enemies) {
             let spriteArray = null;
-            
             if (this.type === 'crawlid') {
                 spriteArray = this.state === 'die' ? 
                     Assets.enemies.crawlid.die : 
                     Assets.enemies.crawlid.walk;
             } else if (this.type === 'boofly') {
                 spriteArray = this.state === 'die' ?  
-                    Assets.enemies. boofly.die : 
-                    Assets.enemies.boofly. fly;
+                    Assets.enemies.boofly.die : 
+                    Assets.enemies.boofly.fly;
+            } else if (this.type === 'boss') {
+                if (this.state === 'die') {
+                    spriteArray = Assets.enemies.boss.die;
+                } else if (this.state === 'attack') {
+                    spriteArray = Assets.enemies.boss.attack;
+                } else {
+                    spriteArray = Assets.enemies.boss.idle;
+                }
             }
-            
             if (spriteArray && spriteArray.length > 0) {
                 const sprite = spriteArray[this.currentFrame % spriteArray.length];
-                
                 if (sprite && sprite.complete) {
-                    ctx.drawImage(sprite, 0, 0, this.width, this. height);
+                    ctx.drawImage(sprite, 0, 0, this.width, this.height);
                     return;
                 }
             }
         }
-        
         // Fallback:  Draw colored rectangle
         this.drawFallbackSprite(ctx);
     }
