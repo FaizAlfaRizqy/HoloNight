@@ -17,6 +17,42 @@ canvas.height = CONFIG.CANVAS.HEIGHT;
 // =============================================================================
 // ASSET LOADING SYSTEM
 // =============================================================================
+// AUDIO SYSTEM
+const Sounds = {
+    bgm: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/bgm.mp3'),
+    hero_hit: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hero_hit.wav'),
+    hero_jump: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hero_jump.mp3'),
+    sword: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/sword.wav'),
+    hit: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hit.wav'),
+    crawlid_death: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/crawlid_death.wav')
+};
+Sounds.bgm.loop = true;
+Sounds.bgm.volume = 0.5;
+for (const key of Object.keys(Sounds)) {
+    if (key !== 'bgm') Sounds[key].volume = 0.7;
+}
+function playSound(sound) {
+    if (!sound) return;
+    // Special handling for BGM: only play if not already playing
+    if (sound === Sounds.bgm) {
+        // If already playing, do nothing
+        if (!sound.paused && !sound.ended) return;
+        // Reset to start if ended
+        if (sound.ended) sound.currentTime = 0;
+        // Try to play
+        sound.play().catch(() => {});
+    } else {
+        // For SFX, always clone for overlap
+        const sfx = sound.cloneNode();
+        sfx.volume = sound.volume;
+        sfx.play();
+    }
+}
+
+// Expose to global scope for use in player.js/enemy.js
+window.Sounds = Sounds;
+window.playSound = playSound;
+
 const Assets = {
     // Hero Sprites
     hero: {
@@ -86,6 +122,14 @@ function updateLoadingProgress() {
 // Load All Assets
 async function loadAssets() {
     console.log("📦 Starting asset loading...");
+    // Start BGM after user interaction (browser policy)
+    function tryPlayBGM() {
+        playSound(Sounds.bgm);
+        document.removeEventListener('keydown', tryPlayBGM);
+        document.removeEventListener('click', tryPlayBGM);
+    }
+    document.addEventListener('keydown', tryPlayBGM, { once: true });
+    document.addEventListener('click', tryPlayBGM, { once: true });
     
     // Hero Idle Animation (5 frames)
     for (let i = 1; i <= 5; i++) {
@@ -379,6 +423,8 @@ function checkPlayerAttackCollisions() {
             const hitResult = enemy.takeDamage(player.attackDamage, player.x);
 
             if (hitResult !== false) {
+                // Play hit SFX
+                playSound(Sounds.hit);
                 // Hit was successful - add to set if id exists and Set available
                 if (
                     player.enemiesHitThisAttack &&

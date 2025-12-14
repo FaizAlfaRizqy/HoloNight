@@ -267,8 +267,7 @@ class Enemy {
     // ✅ FIX: Improved takeDamage dengan cooldown dan knockback yang lebih baik
     takeDamage(damage, playerX) {
         if (this.isDead) return false;
-
-        // ✅ Hit cooldown logic - cegah spam damage
+        // Hit cooldown logic - cegah spam damage
         const now = Date.now();
         if (now - this.lastHitTime < this.hitCooldown) {
             // Masih cooldown, tidak bisa kena hit lagi
@@ -276,11 +275,9 @@ class Enemy {
             return false;
         }
         this.lastHitTime = now;
-
-        // ✅ Knockback yang lebih kuat (vertical)
+        // Knockback yang lebih kuat (vertical)
         this.velocityY = -6; // Vertical knockback
-
-        // ✅ Knockback horizontal berdasarkan posisi player
+        // Knockback horizontal berdasarkan posisi player
         if (playerX !== undefined) {
             if (this.x < playerX) {
                 this.velocityX = -8; // Push left
@@ -288,21 +285,18 @@ class Enemy {
                 this.velocityX = 8; // Push right
             }
         }
-
         // Terima damage
         this.hp -= damage;
-        console.log(`💥 ${this.type} took ${damage} damage! HP: ${this.hp}/${this.maxHp}`);
-
         if (this.hp <= 0) {
             this.hp = 0;
             this.isDead = true;
             this.state = 'die';
             this.currentFrame = 0;
             this.frameCounter = 0;
+            if (this.type === 'crawlid' && typeof playSound === 'function' && window.Sounds) playSound(Sounds.crawlid_death);
             console.log(`☠️ ${this.type} killed!`);
             return true; // Enemy killed
         }
-
         return true; // Enemy kena hit, tapi belum mati
     }
     

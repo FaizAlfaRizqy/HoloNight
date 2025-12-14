@@ -120,6 +120,7 @@ class Player {
             this.velocityY = -this.jumpPower;
             this.isOnGround = false;
             this.canJump = false;
+            if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.hero_jump);
         }
 
         if (!this.keys['x'] && !this.keys['X']) {
@@ -140,10 +141,9 @@ class Player {
             this.currentFrame = 0;
             this.frameCounter = 0;
             this.animationSpeed = 6; // Faster attack animation
-            
             // ✅ FIX: Clear set when starting new attack
             this.enemiesHitThisAttack.clear();
-            
+            if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.sword);
             console.log('⚔️ Attack started!');
         }
     }
@@ -220,13 +220,11 @@ class Player {
     
     takeDamage(damage) {
         if (this.isInvincible) return false;
-        
         this.hp -= damage;
+        if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.hero_hit);
         if (this.hp < 0) this.hp = 0;
-        
         this.isInvincible = true;
         this.invincibleTimer = CONFIG.PLAYER.INVINCIBLE_TIME / 16.67; // Convert to frames
-        
         return true;
     }
     
