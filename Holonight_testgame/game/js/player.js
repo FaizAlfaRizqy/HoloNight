@@ -22,25 +22,28 @@ class Player {
         this.canJump = true;
         
         // Health
-        this.hp = CONFIG. PLAYER.MAX_HP;
-        this.maxHp = CONFIG.PLAYER. MAX_HP;
+        this.hp = CONFIG.PLAYER.MAX_HP;
+        this.maxHp = CONFIG.PLAYER.MAX_HP;
         this.isInvincible = false;
         this.invincibleTimer = 0;
         
         // Attack
         this.isAttacking = false;
-        this.attackDamage = CONFIG. PLAYER.ATTACK_DAMAGE;
+        this.attackDamage = CONFIG.PLAYER.ATTACK_DAMAGE;
         this.attackRange = CONFIG.PLAYER.ATTACK_RANGE;
         this.lastAttackTime = 0;
-        this.attackDuration = CONFIG.PLAYER. ATTACK_DURATION;
+        this.attackDuration = CONFIG.PLAYER.ATTACK_DURATION;
         this.attackStartTime = 0;
+        
+        // ✅ FIX: Track enemies hit in current attack
+        this.enemiesHitThisAttack = new Set(); // Store enemy IDs that were hit
         
         // Animation
         this.currentFrame = 0;
-        this. frameCounter = 0;
-        this. animationSpeed = 8;
+        this.frameCounter = 0;
+        this.animationSpeed = 8;
         this.state = 'idle'; // idle, attack
-        
+
         // Input
         this.keys = {};
         this.setupControls();
@@ -84,11 +87,16 @@ class Player {
             }
         }
 
+        // Reset attack state properly
         if (this.isAttacking) {
             if (Date.now() - this.attackStartTime > this.attackDuration) {
                 this.isAttacking = false;
                 this.state = 'idle';
                 this.currentFrame = 0;
+                // Clear the set of hit enemies (never reassign, just clear)
+                if (this.enemiesHitThisAttack && typeof this.enemiesHitThisAttack.clear === 'function') {
+                    this.enemiesHitThisAttack.clear();
+                }
             }
         }
     }
@@ -102,7 +110,7 @@ class Player {
         }
         if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
             this.velocityX = this.speed;
-            this. isFacingRight = true;
+            this.isFacingRight = true;
         }
     }
     
@@ -132,15 +140,20 @@ class Player {
             this.currentFrame = 0;
             this.frameCounter = 0;
             this.animationSpeed = 6; // Faster attack animation
+            
+            // ✅ FIX: Clear set when starting new attack
+            this.enemiesHitThisAttack.clear();
+            
+            console.log('⚔️ Attack started!');
         }
     }
     
     applyGravity() {
-        if (! this.isOnGround) {
+        if (!this.isOnGround) {
             this.velocityY += this.gravity;
             
             if (this.velocityY > CONFIG.PHYSICS.MAX_FALL_SPEED) {
-                this.velocityY = CONFIG. PHYSICS.MAX_FALL_SPEED;
+                this.velocityY = CONFIG.PHYSICS.MAX_FALL_SPEED;
             }
         }
     }
@@ -169,20 +182,20 @@ class Player {
     constrainToCanvas() {
         if (this.x < 0) this.x = 0;
         if (this.x + this.width > CONFIG.CANVAS.WIDTH) {
-            this.x = CONFIG. CANVAS.WIDTH - this.width;
+            this.x = CONFIG.CANVAS.WIDTH - this.width;
         }
     }
     
     updateAnimation() {
         this.frameCounter++;
         
-        if (this. frameCounter >= this.animationSpeed) {
+        if (this.frameCounter >= this.animationSpeed) {
             this.frameCounter = 0;
             
             if (this.state === 'attack') {
                 this.currentFrame++;
                 // Attack has 2 frames
-                if (this. currentFrame >= 2) {
+                if (this.currentFrame >= 2) {
                     this.currentFrame = 1; // Hold last frame
                 }
             } else {
@@ -193,14 +206,14 @@ class Player {
     }
     
     getAttackHitbox() {
-        if (! this.isAttacking) return null;
+        if (!this.isAttacking) return null;
         
         return {
             x: this.isFacingRight ? 
-                this.x + this.width :  
+                this.x + this.width : 
                 this.x - this.attackRange,
-            y: this. y,
-            width: this. attackRange,
+            y: this.y,
+            width: this.attackRange,
             height: this.height
         };
     }
@@ -212,7 +225,7 @@ class Player {
         if (this.hp < 0) this.hp = 0;
         
         this.isInvincible = true;
-        this.invincibleTimer = CONFIG.PLAYER. INVINCIBLE_TIME / 16.67; // Convert to frames
+        this.invincibleTimer = CONFIG.PLAYER.INVINCIBLE_TIME / 16.67; // Convert to frames
         
         return true;
     }
@@ -221,13 +234,13 @@ class Player {
         // Blinking effect saat invincible
         if (this.isInvincible) {
             const shouldDraw = Math.floor(this.invincibleTimer / 5) % 2 === 0;
-            if (! shouldDraw) return;
+            if (!shouldDraw) return;
         }
         
         ctx.save();
         
         // Flip sprite jika menghadap kiri
-        if (! this.isFacingRight) {
+        if (!this.isFacingRight) {
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
         } else {
@@ -235,7 +248,7 @@ class Player {
         }
         
         // Get current sprite
-        const spriteArray = this.state === 'attack' ? assets. hero. attack : assets.hero.idle;
+        const spriteArray = this.state === 'attack' ? assets.hero.attack : assets.hero.idle;
         const currentSprite = spriteArray[this.currentFrame];
         
         if (currentSprite && currentSprite.complete) {
@@ -252,11 +265,11 @@ class Player {
         if (this.isAttacking) {
             const hitbox = this.getAttackHitbox();
             ctx.fillStyle = 'rgba(255, 235, 59, 0.3)';
-            ctx.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox. height);
+            ctx.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
             
             ctx.strokeStyle = CONFIG.COLORS.PLAYER_ATTACK;
             ctx.lineWidth = 3;
-            ctx.strokeRect(hitbox.x, hitbox. y, hitbox.width, hitbox.height);
+            ctx.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         }
         
         // HP bar above player
@@ -267,7 +280,7 @@ class Player {
         const barWidth = this.width;
         const barHeight = 6;
         const barX = this.x;
-        const barY = this. y - 15;
+        const barY = this.y - 15;
         
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(barX, barY, barWidth, barHeight);
@@ -290,8 +303,8 @@ class Player {
     }
     
     isAlive() {
-        return this. hp > 0;
+        return this.hp > 0;
     }
 }
 
-console.log("✅ Player class loaded with sprite support");
+console.log("✅ Player class loaded with sprite support (FIXED v2 - Set-based tracking)");

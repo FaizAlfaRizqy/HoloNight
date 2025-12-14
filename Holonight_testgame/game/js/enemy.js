@@ -1,10 +1,17 @@
 // =============================================================================
 // ENEMY CLASS - Multiple Types with Sprite Animation
-// Supports:  Crawlid (ground), Boofly (flying), Boss
+// Supports: Crawlid (ground), Boofly (flying), Boss
 // =============================================================================
 
 class Enemy {
     constructor(x, y, wave, type = 'crawlid') {
+        // Unique ID for tracking (short, robust)
+        this.id = `${type}_${Math.floor(Math.random()*1e8)}_${Date.now()}`;
+        
+        // ✅ FIX: Hit cooldown untuk prevent spam damage
+        this.lastHitTime = 0;
+        this.hitCooldown = 500; // 0.5 detik cooldown (lebih responsif)
+        
         // Position & Dimensions
         this.x = x;
         this.y = y;
@@ -24,7 +31,7 @@ class Enemy {
         this.velocityX = this.speed;
         this.velocityY = 0;
         this.gravity = CONFIG.PLAYER.GRAVITY;
-        this. isOnGround = false;
+        this.isOnGround = false;
         
         // AI State
         this.aiState = 'patrol'; // 'patrol', 'chase', 'attack'
@@ -70,7 +77,7 @@ class Enemy {
                 this.height = 45;
                 break;
             case 'boss':
-                this. width = 80;
+                this.width = 80;
                 this.height = 100;
                 break;
             default:
@@ -79,20 +86,32 @@ class Enemy {
         }
     }
     
+    // ✅ FIX: HP Scaling untuk kelipatan 10 wave
     calculateHP(wave) {
-        const baseHP = CONFIG.ENEMY.BASE_HP;
-        const increase = CONFIG.WAVE.HP_INCREASE_PER_WAVE;
+        const playerDamage = CONFIG.PLAYER.ATTACK_DAMAGE;
         
-        let multiplier = 1;
-        if (this.type === 'boofly') multiplier = 0.8; // Flying enemies weaker
-        if (this.type === 'boss') multiplier = 3; // Boss 3x stronger
+        // Base hits needed per enemy type
+        let baseHitsNeeded = 1;
+        if (this.type === 'crawlid') {
+            baseHitsNeeded = 2; // 2 hits untuk crawlid
+        } else if (this.type === 'boofly') {
+            baseHitsNeeded = 1; // 1 hit untuk boofly
+        } else if (this.type === 'boss') {
+            baseHitsNeeded = 5; // 5 hits untuk boss
+        }
         
-        return Math.floor((baseHP + ((wave - 1) * increase)) * multiplier);
+        // ✅ Tambahan hits setiap kelipatan 10 wave
+        const waveBonus = Math.floor(wave / 10); // +1 hit setiap 10 wave
+        const totalHitsNeeded = baseHitsNeeded + waveBonus;
+        
+        console.log(`🎯 ${this.type.toUpperCase()} Wave ${wave}: ${totalHitsNeeded} hits needed (base: ${baseHitsNeeded} + bonus: ${waveBonus})`);
+        
+        return totalHitsNeeded * playerDamage;
     }
     
     calculateSpeed(wave) {
         const baseSpeed = CONFIG.ENEMY.BASE_SPEED;
-        const increase = CONFIG. WAVE.SPEED_INCREASE_PER_WAVE;
+        const increase = CONFIG.WAVE.SPEED_INCREASE_PER_WAVE;
         
         let multiplier = 1;
         if (this.type === 'boofly') multiplier = 1.3; // Flying enemies faster
@@ -103,13 +122,13 @@ class Enemy {
     
     calculateDamage(wave) {
         const baseDamage = CONFIG.ENEMY.BASE_DAMAGE;
-        const increase = CONFIG.WAVE. DAMAGE_INCREASE_PER_WAVE;
+        const increase = CONFIG.WAVE.DAMAGE_INCREASE_PER_WAVE;
         
         let multiplier = 1;
         if (this.type === 'boofly') multiplier = 0.8;
         if (this.type === 'boss') multiplier = 2;
         
-        return Math. floor((baseDamage + ((wave - 1) * increase)) * multiplier);
+        return Math.floor((baseDamage + ((wave - 1) * increase)) * multiplier);
     }
     
     update(deltaTime, player) {
@@ -189,13 +208,13 @@ class Enemy {
             this.velocityY += this.gravity;
             
             if (this.velocityY > CONFIG.PHYSICS.MAX_FALL_SPEED) {
-                this.velocityY = CONFIG. PHYSICS.MAX_FALL_SPEED;
+                this.velocityY = CONFIG.PHYSICS.MAX_FALL_SPEED;
             }
         }
     }
     
     checkGroundCollision() {
-        const groundY = CONFIG. PHYSICS.GROUND_Y;
+        const groundY = CONFIG.PHYSICS.GROUND_Y;
         
         if (this.y + this.height >= groundY) {
             this.y = groundY - this.height;
@@ -213,7 +232,7 @@ class Enemy {
             this.isFacingRight = true;
         }
         if (this.x + this.width > CONFIG.CANVAS.WIDTH) {
-            this.x = CONFIG.CANVAS.WIDTH - this. width;
+            this.x = CONFIG.CANVAS.WIDTH - this.width;
             this.velocityX = -Math.abs(this.velocityX);
             this.isFacingRight = false;
         }
@@ -230,9 +249,9 @@ class Enemy {
         
         if (colliding) {
             const currentTime = Date.now();
-            if (currentTime - this.lastTouchDamageTime > CONFIG. ENEMY.TOUCH_DAMAGE_COOLDOWN) {
-                if (player.takeDamage(this. damage)) {
-                    this. lastTouchDamageTime = currentTime;
+            if (currentTime - this.lastTouchDamageTime > CONFIG.ENEMY.TOUCH_DAMAGE_COOLDOWN) {
+                if (player.takeDamage(this.damage)) {
+                    this.lastTouchDamageTime = currentTime;
                     
                     // Knockback enemy
                     if (this.x < player.x) {
@@ -245,23 +264,46 @@ class Enemy {
         }
     }
     
-    takeDamage(damage) {
+    // ✅ FIX: Improved takeDamage dengan cooldown dan knockback yang lebih baik
+    takeDamage(damage, playerX) {
         if (this.isDead) return false;
-        
+
+        // ✅ Hit cooldown logic - cegah spam damage
+        const now = Date.now();
+        if (now - this.lastHitTime < this.hitCooldown) {
+            // Masih cooldown, tidak bisa kena hit lagi
+            console.log(`⏳ ${this.type} (${this.hp}HP) is in hit cooldown`);
+            return false;
+        }
+        this.lastHitTime = now;
+
+        // ✅ Knockback yang lebih kuat (vertical)
+        this.velocityY = -6; // Vertical knockback
+
+        // ✅ Knockback horizontal berdasarkan posisi player
+        if (playerX !== undefined) {
+            if (this.x < playerX) {
+                this.velocityX = -8; // Push left
+            } else {
+                this.velocityX = 8; // Push right
+            }
+        }
+
+        // Terima damage
         this.hp -= damage;
-        
+        console.log(`💥 ${this.type} took ${damage} damage! HP: ${this.hp}/${this.maxHp}`);
+
         if (this.hp <= 0) {
             this.hp = 0;
             this.isDead = true;
             this.state = 'die';
             this.currentFrame = 0;
             this.frameCounter = 0;
+            console.log(`☠️ ${this.type} killed!`);
             return true; // Enemy killed
         }
-        
-        // Knockback on hit
-        this.velocityY = -5;
-        return false; // Enemy damaged but alive
+
+        return true; // Enemy kena hit, tapi belum mati
     }
     
     updateAnimation() {
@@ -334,7 +376,7 @@ class Enemy {
                     Assets.enemies.crawlid.die : 
                     Assets.enemies.crawlid.walk;
             } else if (this.type === 'boofly') {
-                spriteArray = this.state === 'die' ?  
+                spriteArray = this.state === 'die' ? 
                     Assets.enemies.boofly.die : 
                     Assets.enemies.boofly.fly;
             } else if (this.type === 'boss') {
@@ -354,7 +396,7 @@ class Enemy {
                 }
             }
         }
-        // Fallback:  Draw colored rectangle
+        // Fallback: Draw colored rectangle
         this.drawFallbackSprite(ctx);
     }
     
@@ -381,7 +423,7 @@ class Enemy {
         // Border
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 2;
-        ctx. strokeRect(0, 0, this.width, this.height);
+        ctx.strokeRect(0, 0, this.width, this.height);
         
         // Wave number indicator
         ctx.fillStyle = '#ffffff';
@@ -396,7 +438,7 @@ class Enemy {
         const barWidth = this.width;
         const barHeight = 5;
         const barX = this.x;
-        const barY = this. y - 10;
+        const barY = this.y - 10;
         
         // Background
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
@@ -418,13 +460,13 @@ class Enemy {
         ctx.fillStyle = '#ffffff';
         ctx.font = '10px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText(this.aiState. toUpperCase(), this.x + this.width / 2, this. y - 20);
+        ctx.fillText(this.aiState.toUpperCase(), this.x + this.width / 2, this.y - 20);
         
-        // Type indicator
+        // Type indicator with HP info
         ctx.font = 'bold 8px Arial';
         ctx.fillStyle = '#ffeb3b';
-        ctx. fillText(this.type.toUpperCase(), this.x + this.width / 2, this. y - 30);
+        ctx.fillText(`${this.type.toUpperCase()} [${this.hp}/${this.maxHp}]`, this.x + this.width / 2, this.y - 30);
     }
 }
 
-console.log("✅ Enemy class loaded with multi-type support");
+console.log("✅ Enemy class loaded with multi-type support (FIXED v2 - Unique ID + shorter cooldown)");

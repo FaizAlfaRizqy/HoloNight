@@ -3,15 +3,15 @@
 // Main Game Engine dengan Wave System & Asset Integration
 // =============================================================================
 
-console.log("🎮 Loading Hollow Knight Wave Survival.. .");
+console.log("🎮 Loading Hollow Knight Wave Survival...");
 
 // =============================================================================
 // CANVAS & CONTEXT SETUP
 // =============================================================================
 const canvas = document.getElementById('gameCanvas');
-const ctx = canvas. getContext('2d');
+const ctx = canvas.getContext('2d');
 
-canvas.width = CONFIG.CANVAS. WIDTH;
+canvas.width = CONFIG.CANVAS.WIDTH;
 canvas.height = CONFIG.CANVAS.HEIGHT;
 
 // =============================================================================
@@ -26,7 +26,7 @@ const Assets = {
     
     // Enemy Sprites
     enemies: {
-        crawlid:  {
+        crawlid: {
             walk: [],
             die: []
         },
@@ -40,7 +40,7 @@ const Assets = {
     // Environment
     environment: {
         background: null,
-        foreground:  null,
+        foreground: null,
         platform: null,
         floor: null
     },
@@ -61,7 +61,7 @@ function loadImage(src) {
             resolve(img);
         };
         img.onerror = () => {
-            console.warn(`⚠️ Failed to load:  ${src}`);
+            console.warn(`⚠️ Failed to load: ${src}`);
             Assets.loaded++;
             updateLoadingProgress();
             resolve(null); // Continue even if image fails
@@ -74,7 +74,7 @@ function loadImage(src) {
 // Update Loading Progress
 function updateLoadingProgress() {
     const progress = Math.floor((Assets.loaded / Assets.total) * 100);
-    console.log(`📦 Loading assets...  ${progress}%`);
+    console.log(`📦 Loading assets... ${progress}%`);
     
     if (Assets.loaded === Assets.total) {
         Assets.isReady = true;
@@ -163,7 +163,7 @@ const waveManager = {
     currentWave: 1,
     enemiesSpawned: 0,
     enemiesRequired: 0,
-    enemiesKilled:  0,
+    enemiesKilled: 0,
     isTransitioning: false,
     transitionTimer: 0,
     spawnTimer: 0,
@@ -184,8 +184,8 @@ const platforms = [
     },
     // Floating platforms
     { x: 150, y: 400, width: 200, height: 20, type: 'platform' },
-    { x:  400, y: 350, width: 200, height:  20, type: 'platform' },
-    { x: 650, y: 400, width: 200, height:  20, type: 'platform' }
+    { x: 400, y: 350, width: 200, height: 20, type: 'platform' },
+    { x: 650, y: 400, width: 200, height: 20, type: 'platform' }
 ];
 
 // =============================================================================
@@ -228,8 +228,8 @@ function startWave(waveNumber) {
     waveManager.enemiesSpawned = 0;
     
     // Calculate enemies for this wave
-    const baseCount = CONFIG.WAVE. BASE_ENEMY_COUNT;
-    const increment = CONFIG.WAVE. ENEMY_INCREMENT;
+    const baseCount = CONFIG.WAVE.BASE_ENEMY_COUNT;
+    const increment = CONFIG.WAVE.ENEMY_INCREMENT;
     waveManager.enemiesRequired = Math.min(
         baseCount + (waveNumber - 1) * increment,
         CONFIG.WAVE.MAX_ENEMIES_PER_WAVE
@@ -238,7 +238,7 @@ function startWave(waveNumber) {
     // Check if boss wave
     const isBossWave = (waveNumber % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0);
     if (isBossWave) {
-        console.log("💀 BOSS WAVE!");
+        console.log("👑 BOSS WAVE!");
         waveManager.enemiesRequired = 1; // Only 1 boss
     }
     
@@ -247,7 +247,6 @@ function startWave(waveNumber) {
     // Reset spawn timer
     waveManager.spawnTimer = 0;
     waveManager.isTransitioning = false;
-
 
     // Staged enemy spawning: 3-second delay, then spawn 3 at a time every 3 seconds
     waveManager.stagedSpawn = {
@@ -299,9 +298,9 @@ function spawnEnemy() {
 function checkWaveComplete() {
     // Check if all enemies spawned and killed
     const allSpawned = waveManager.enemiesSpawned >= waveManager.enemiesRequired;
-    const allKilled = enemies.filter(e => ! e.isDead).length === 0;
+    const allKilled = enemies.filter(e => !e.isDead).length === 0;
     
-    if (allSpawned && allKilled && ! waveManager.isTransitioning) {
+    if (allSpawned && allKilled && !waveManager.isTransitioning) {
         waveComplete();
     }
 }
@@ -347,39 +346,56 @@ function updateWaveTransition(deltaTime) {
 }
 
 // =============================================================================
-// ENEMY SPAWNING SYSTEM
-// =============================================================================
-// updateSpawning tidak diperlukan lagi, spawn musuh langsung di startWave
-
-// =============================================================================
 // COLLISION DETECTION
 // =============================================================================
+// ✅ FIX v3: Access global player variable
 function checkPlayerAttackCollisions() {
-    if (! player.isAttacking) return;
-    
+    // Player is global, so we can access it directly
+    if (!player || !player.isAttacking) return;
+
     const hitbox = player.getAttackHitbox();
     if (!hitbox) return;
-    
+
     for (let enemy of enemies) {
-        if (enemy.isDead) continue;
-        
+        if (!enemy || enemy.isDead) continue;
+
+        // Only skip if enemiesHitThisAttack is a Set and enemy.id exists and already hit
+        if (
+            player.enemiesHitThisAttack &&
+            typeof player.enemiesHitThisAttack.has === 'function' &&
+            enemy.id &&
+            player.enemiesHitThisAttack.has(enemy.id)
+        ) {
+            continue;
+        }
+
         // Simple AABB collision
         if (hitbox.x < enemy.x + enemy.width &&
             hitbox.x + hitbox.width > enemy.x &&
             hitbox.y < enemy.y + enemy.height &&
-            hitbox. y + hitbox.height > enemy.y) {
-            
-            // Hit enemy
-            const killed = enemy.takeDamage(player.attackDamage);
-            
-            if (killed) {
-                score += CONFIG.SCORE.ENEMY_KILL;
-                waveManager.enemiesKilled++;
-                console.log(`💀 Enemy killed! (${waveManager.enemiesKilled}/${waveManager.enemiesRequired})`);
+            hitbox.y + hitbox.height > enemy.y) {
+
+            // Try to hit enemy (enemy will check its own cooldown)
+            const hitResult = enemy.takeDamage(player.attackDamage, player.x);
+
+            if (hitResult !== false) {
+                // Hit was successful - add to set if id exists and Set available
+                if (
+                    player.enemiesHitThisAttack &&
+                    typeof player.enemiesHitThisAttack.add === 'function' &&
+                    enemy.id
+                ) {
+                    player.enemiesHitThisAttack.add(enemy.id);
+                }
+                console.log(`✅ Hit ${enemy.type}! Enemies hit this attack: ${player.enemiesHitThisAttack.size}`);
+                
+                // Check if enemy died
+                if (enemy.isDead) {
+                    score += CONFIG.SCORE.ENEMY_KILL;
+                    waveManager.enemiesKilled++;
+                    console.log(`💀 Enemy killed! (${waveManager.enemiesKilled}/${waveManager.enemiesRequired})`);
+                }
             }
-            
-            // Only hit one enemy per attack frame
-            break;
         }
     }
 }
@@ -445,7 +461,7 @@ function update(deltaTime) {
     checkWaveComplete();
     
     // Check game over
-    if (! player.isAlive()) {
+    if (!player.isAlive()) {
         gameOver();
     }
     
@@ -475,17 +491,17 @@ function draw() {
     }
     
     // Draw player
-    player. draw(ctx, Assets);
+    player.draw(ctx, Assets);
     
     // Draw foreground
-    if (Assets.environment.foreground && Assets.environment. foreground.complete) {
+    if (Assets.environment.foreground && Assets.environment.foreground.complete) {
         ctx.globalAlpha = 0.3;
         ctx.drawImage(Assets.environment.foreground, 0, 0, canvas.width, canvas.height);
         ctx.globalAlpha = 1.0;
     }
     
     // Draw wave transition overlay
-    if (waveManager. isTransitioning) {
+    if (waveManager.isTransitioning) {
         drawWaveTransition();
     }
 }
@@ -507,9 +523,9 @@ function drawPlatforms() {
                 }
             } else {
                 // Fallback
-                ctx.fillStyle = CONFIG.COLORS. GROUND;
+                ctx.fillStyle = CONFIG.COLORS.GROUND;
                 ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
-                ctx.strokeStyle = CONFIG.COLORS. GROUND_BORDER;
+                ctx.strokeStyle = CONFIG.COLORS.GROUND_BORDER;
                 ctx.lineWidth = 3;
                 ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
             }
@@ -519,11 +535,11 @@ function drawPlatforms() {
                 ctx.drawImage(
                     Assets.environment.platform,
                     platform.x, platform.y,
-                    platform. width, platform.height
+                    platform.width, platform.height
                 );
             } else {
                 // Fallback
-                ctx.fillStyle = CONFIG.COLORS. GROUND;
+                ctx.fillStyle = CONFIG.COLORS.GROUND;
                 ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
                 ctx.strokeStyle = CONFIG.COLORS.GROUND_BORDER;
                 ctx.lineWidth = 2;
@@ -536,7 +552,7 @@ function drawPlatforms() {
 function drawWaveTransition() {
     // Semi-transparent overlay
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    ctx.fillRect(0, 0, canvas. width, canvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Wave complete text
     ctx.fillStyle = '#ffffff';
@@ -547,13 +563,13 @@ function drawWaveTransition() {
     const alpha = Math.sin((waveManager.transitionTimer / 120) * Math.PI);
     ctx.globalAlpha = alpha;
     
-    ctx.fillText(`WAVE ${waveManager.currentWave} COMPLETE! `, canvas.width / 2, canvas.height / 2 - 40);
+    ctx.fillText(`WAVE ${waveManager.currentWave} COMPLETE!`, canvas.width / 2, canvas.height / 2 - 40);
     
     ctx.font = 'bold 32px Arial';
     ctx.fillText(`+${CONFIG.SCORE.WAVE_COMPLETE} BONUS`, canvas.width / 2, canvas.height / 2 + 20);
     
     ctx.font = 'bold 24px Arial';
-    ctx.fillText(`Next wave starting... `, canvas.width / 2, canvas.height / 2 + 60);
+    ctx.fillText(`Next wave starting...`, canvas.width / 2, canvas.height / 2 + 60);
     
     ctx.globalAlpha = 1.0;
     ctx.textAlign = 'left';
@@ -564,31 +580,31 @@ function drawWaveTransition() {
 // =============================================================================
 function updateUI() {
     // Update health bar
-    const healthBar = document.getElementById('playerHealthBar');
-    const healthText = document.getElementById('playerHpText');
-    if (healthBar && healthText) {
+    const healthBarFill = document.getElementById('healthBarFill');
+    const healthText = document.getElementById('healthText');
+    if (healthBarFill && healthText) {
         const healthPercent = (player.hp / player.maxHp) * 100;
-        healthBar. style.width = healthPercent + '%';
+        healthBarFill.style.width = healthPercent + '%';
         healthText.textContent = `${player.hp} / ${player.maxHp}`;
     }
     
     // Update wave number
-    const waveNumber = document.getElementById('waveNumber');
-    if (waveNumber) {
-        waveNumber.textContent = waveManager.currentWave;
+    const waveDisplay = document.getElementById('waveDisplay');
+    if (waveDisplay) {
+        waveDisplay.textContent = waveManager.currentWave;
     }
     
     // Update score
-    const scoreValue = document.getElementById('scoreValue');
-    if (scoreValue) {
-        scoreValue.textContent = score. toLocaleString();
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    if (scoreDisplay) {
+        scoreDisplay.textContent = score.toLocaleString();
     }
     
     // Update enemy count
-    const enemyCount = document.getElementById('enemyCount');
-    if (enemyCount) {
+    const enemiesDisplay = document.getElementById('enemiesDisplay');
+    if (enemiesDisplay) {
         const aliveCount = enemies.filter(e => !e.isDead).length;
-        enemyCount.textContent = `${aliveCount} / ${waveManager.enemiesRequired}`;
+        enemiesDisplay.textContent = `${aliveCount} / ${waveManager.enemiesRequired}`;
     }
 }
 
@@ -615,7 +631,7 @@ function gameOver() {
 // GAME CONTROLS
 // =============================================================================
 function restartGame() {
-    console.log("🔄 Restarting game.. .");
+    console.log("🔄 Restarting game...");
     
     // Clear enemies
     enemies = [];
@@ -649,16 +665,17 @@ function autoSaveScore() {
     .then(data => {
         if (data.success) {
             console.log("✅ Score saved! Rank: #" + data.rank);
-            // Update rank display
-            document.getElementById('playerRank').textContent = '#' + data.rank;
+            // Update rank display if element exists
+            const rankElement = document.getElementById('playerRank');
+            if (rankElement) {
+                rankElement.textContent = '#' + data.rank;
+            }
         } else {
             console.error('❌ Failed to save score:', data.message);
-            document.getElementById('playerRank').textContent = '#-';
         }
     })
     .catch(error => {
         console.error('❌ Error saving score:', error);
-        document.getElementById('playerRank').textContent = '#-';
     });
 }
 
@@ -732,7 +749,7 @@ console.log("📦 Loading assets...");
 
 // Start loading assets
 loadAssets().then(() => {
-    console.log("✅ Assets loaded!  Starting game...");
+    console.log("✅ Assets loaded! Starting game...");
     gameLoop();
 });
 
@@ -740,4 +757,4 @@ loadAssets().then(() => {
 window.restartGame = restartGame;
 window.saveScore = saveScore;
 
-console.log("✅ Game. js loaded successfully!");
+console.log("✅ Game.js loaded successfully (FIXED v2 - Set-based enemy tracking)!");

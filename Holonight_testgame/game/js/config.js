@@ -18,8 +18,8 @@ const CONFIG = {
         JUMP_POWER: 10,    // Lebih natural untuk per frame
         GRAVITY: 0.32,      // Lebih natural untuk per frame
         MAX_HP: 100,
-        ATTACK_DAMAGE: 25,
-        ATTACK_RANGE: 80,
+        ATTACK_DAMAGE: 15,
+        ATTACK_RANGE: 50,
         ATTACK_COOLDOWN: 300,
         ATTACK_DURATION: 200,
         COLOR: '#4a9eff',
@@ -31,7 +31,7 @@ const CONFIG = {
         WIDTH: 45,
         HEIGHT: 60,
         BASE_SPEED: 0.3,    // Lebih natural untuk per frame
-        BASE_HP: 50,
+        BASE_HP: 100,
         BASE_DAMAGE: 10,
         COLOR: '#ff4757',
         SPAWN_MARGIN: 150,
