@@ -14,6 +14,7 @@ $user = getCurrentUser();
     <link rel="stylesheet" href="css/game.css">
 </head>
 <body>
+    <img src="../src/game/ui/left.png" alt="UI Left" class="ui-left-image">
     <!-- Game Container -->
     <div class="game-container">
         <!-- Header UI Bar -->
@@ -26,32 +27,23 @@ $user = getCurrentUser();
         
         <!-- Stats Bar (Above Canvas) -->
         <div class="stats-bar">
-            <!-- Health -->
-            <div class="stat-group">
-                <span class="stat-label">HEALTH: </span>
-                <div class="health-bar-container">
-                    <div class="health-bar-fill" id="healthBarFill"></div>
-                </div>
-                <span class="health-text" id="healthText">100 / 100</span>
-            </div>
-            
-            <!-- Wave -->
-            <div class="stat-group">
-                <span class="stat-label">WAVE:</span>
-                <span class="stat-value" id="waveDisplay">1</span>
+            <!-- Health Icons -->
+            <div class="health-container" id="healthContainer">
+                <img src="../src/game/ui/health.png" alt="Health" class="health-icon">
+                <img src="../src/game/ui/health.png" alt="Health" class="health-icon">
+                <img src="../src/game/ui/health.png" alt="Health" class="health-icon">
+                <img src="../src/game/ui/health.png" alt="Health" class="health-icon">
+                <img src="../src/game/ui/health.png" alt="Health" class="health-icon">
             </div>
             
             <!-- Score -->
-            <div class="stat-group">
-                <span class="stat-label">SCORE: </span>
-                <span class="stat-value" id="scoreDisplay">100</span>
+            <div class="stat-group score-group">
+                <img src="../src/game/ui/money.png" alt="Money" class="score-icon">
+                <div class="score-text">
+                    <span class="stat-value" id="scoreDisplay">100</span>
+                </div>
             </div>
             
-            <!-- Enemies -->
-            <div class="stat-group">
-                <span class="stat-label">ENEMIES: </span>
-                <span class="stat-value" id="enemiesDisplay">0 / 3</span>
-            </div>
         </div>
         
         <!-- Canvas Wrapper -->
@@ -68,18 +60,25 @@ $user = getCurrentUser();
     <!-- Game Over Screen -->
     <div class="game-over-overlay" id="gameOverScreen">
         <div class="game-over-content">
-            <h2>💀 GAME OVER</h2>
-            <p class="game-over-subtitle">You have fallen in the depths of Hollownest</p>
+            <div class="game-over-title" id="gameOverTitle">GAME OVER</div>
+            <div class="blood-drip"></div>
             
-            <div class="final-stats">
-                <p>Wave Reached: <span id="finalWave">0</span></p>
-                <p>Final Score: <span id="finalScore">0</span></p>
+            <!-- Score and Wave - Side by Side -->
+            <div class="stats-container">
+                <div class="game-over-score">
+                    <div class="score-label">FINAL SCORE</div>
+                    <div class="score-value" id="finalScoreDisplay">0</div>
+                </div>
+                <div class="game-over-wave">
+                    <div class="wave-label">WAVE</div>
+                    <div class="wave-value" id="finalWaveDisplay">0</div>
+                </div>
             </div>
             
             <div class="game-over-buttons">
-                <button class="btn-game" onclick="saveScore()">Save Score</button>
-                <button class="btn-game" onclick="restartGame()">Restart</button>
-                <a href="../main.php" class="btn-game">Main Menu</a>
+                <button class="btn-death" onclick="saveScore()">SAVE</button>
+                <button class="btn-death" onclick="restartGame()">RETRY</button>
+                <a href="../main.php" class="btn-death">ESCAPE</a>
             </div>
         </div>
     </div>
@@ -91,25 +90,7 @@ $user = getCurrentUser();
             username: '<?php echo addslashes($user['username']); ?>'
         };
     </script>
-
-    fetch('../save_score.php', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        score: finalScore,
-        wave: finalWave,
-        game_time: gameTime
-    })
-})
-.then(res => res.json())
-.then(data => {
-    console.log(data);
-})
-.catch(err => {
-    console.error("JSON ERROR:", err);
-});
+    
 
     
     <!-- Load JavaScript (ORDER IMPORTANT!) -->

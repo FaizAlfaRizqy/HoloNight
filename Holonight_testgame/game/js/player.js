@@ -21,9 +21,9 @@ class Player {
         this.gravity = CONFIG.PLAYER.GRAVITY;
         this.canJump = true;
         
-        // Health
-        this.hp = CONFIG.PLAYER.MAX_HP;
-        this.maxHp = CONFIG.PLAYER.MAX_HP;
+        // Health (Hit-based system)
+        this.hits = 0; // Number of hits taken
+        this.maxHits = 5; // Dies after 5 hits
         this.isInvincible = false;
         this.invincibleTimer = 0;
         
@@ -141,8 +141,10 @@ class Player {
             this.currentFrame = 0;
             this.frameCounter = 0;
             this.animationSpeed = 6; // Faster attack animation
+            
             // ✅ FIX: Clear set when starting new attack
             this.enemiesHitThisAttack.clear();
+            
             if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.sword);
             console.log('⚔️ Attack started!');
         }
@@ -220,11 +222,14 @@ class Player {
     
     takeDamage(damage) {
         if (this.isInvincible) return false;
-        this.hp -= damage;
+        
+        this.hits += 1; // Increment hit count
         if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.hero_hit);
-        if (this.hp < 0) this.hp = 0;
+        console.log(`💔 Player hit! ${this.hits}/${this.maxHits}`);
+        
         this.isInvincible = true;
         this.invincibleTimer = CONFIG.PLAYER.INVINCIBLE_TIME / 16.67; // Convert to frames
+        
         return true;
     }
     
@@ -270,38 +275,10 @@ class Player {
             ctx.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         }
         
-        // HP bar above player
-        this.drawHealthBar(ctx);
-    }
-    
-    drawHealthBar(ctx) {
-        const barWidth = this.width;
-        const barHeight = 6;
-        const barX = this.x;
-        const barY = this.y - 15;
-        
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(barX, barY, barWidth, barHeight);
-        
-        const hpPercentage = this.hp / this.maxHp;
-        
-        if (hpPercentage > 0.5) {
-            ctx.fillStyle = CONFIG.COLORS.HP_BAR_GOOD;
-        } else if (hpPercentage > 0.25) {
-            ctx.fillStyle = CONFIG.COLORS.HP_BAR_MID;
-        } else {
-            ctx.fillStyle = CONFIG.COLORS.HP_BAR_LOW;
-        }
-        
-        ctx.fillRect(barX, barY, barWidth * hpPercentage, barHeight);
-        
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(barX, barY, barWidth, barHeight);
     }
     
     isAlive() {
-        return this.hp > 0;
+        return this.hits < this.maxHits;
     }
 }
 

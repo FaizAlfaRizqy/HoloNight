@@ -19,15 +19,15 @@ canvas.height = CONFIG.CANVAS.HEIGHT;
 // =============================================================================
 // AUDIO SYSTEM
 const Sounds = {
-    bgm: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/bgm.mp3'),
-    hero_hit: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hero_hit.wav'),
-    hero_jump: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hero_jump.mp3'),
-    sword: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/sword.wav'),
-    hit: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/hit.wav'),
-    crawlid_death: new Audio('/Project_pw/HoloNight/Holonight_testgame/src/game/audio/crawlid_death.wav')
+    bgm: new Audio('../src/game/audio/bgm.mp3'),
+    hero_hit: new Audio('../src/game/audio/hero_hit.wav'),
+    hero_jump: new Audio('../src/game/audio/hero_jump.mp3'),
+    sword: new Audio('../src/game/audio/hit.wav'),
+    hit: new Audio('../src/game/audio/hit.wav'),
+    crawlid_death: new Audio('../src/game/audio/crawlid_death.wav')
 };
 Sounds.bgm.loop = true;
-Sounds.bgm.volume = 0.5;
+Sounds.bgm.volume = 0.3;
 for (const key of Object.keys(Sounds)) {
     if (key !== 'bgm') Sounds[key].volume = 0.7;
 }
@@ -122,6 +122,7 @@ function updateLoadingProgress() {
 // Load All Assets
 async function loadAssets() {
     console.log("📦 Starting asset loading...");
+
     // Start BGM after user interaction (browser policy)
     function tryPlayBGM() {
         playSound(Sounds.bgm);
@@ -130,7 +131,7 @@ async function loadAssets() {
     }
     document.addEventListener('keydown', tryPlayBGM, { once: true });
     document.addEventListener('click', tryPlayBGM, { once: true });
-    
+
     // Hero Idle Animation (5 frames)
     for (let i = 1; i <= 5; i++) {
         const img = await loadImage(`../src/game/hero/idle/idle_0${i}.png`);
@@ -185,7 +186,7 @@ async function loadAssets() {
     if (bossDie) Assets.enemies.boss.die.push(bossDie);
 
     // Environment
-    Assets.environment.background = await loadImage(`../src/game/background.webp`);
+    Assets.environment.background = await loadImage(`../src/game/object/background_2.png`);
     Assets.environment.foreground = await loadImage(`../src/game/foreground/foreground.png`);
     Assets.environment.platform = await loadImage(`../src/game/platform/platform.png`);
     Assets.environment.floor = await loadImage(`../src/game/object/floor_6.png`);
@@ -359,9 +360,9 @@ function waveComplete() {
     // Hapus semua musuh yang sudah mati dari array enemies
     enemies = enemies.filter(enemy => !enemy.isDead);
 
-    // Jika boss wave, reward: full heal
+    // Jika boss wave, reward: reset hits (full heal)
     if (waveManager.currentWave % CONFIG.WAVE.BOSS_WAVE_INTERVAL === 0) {
-        player.hp = player.maxHp;
+        player.hits = 0;
         console.log('🎁 Boss defeated! Player fully healed!');
     }
 
@@ -625,13 +626,20 @@ function drawWaveTransition() {
 // UI UPDATE
 // =============================================================================
 function updateUI() {
-    // Update health bar
-    const healthBarFill = document.getElementById('healthBarFill');
-    const healthText = document.getElementById('healthText');
-    if (healthBarFill && healthText) {
-        const healthPercent = (player.hp / player.maxHp) * 100;
-        healthBarFill.style.width = healthPercent + '%';
-        healthText.textContent = `${player.hp} / ${player.maxHp}`;
+    // Update health icons
+    const healthIcons = document.querySelectorAll('.health-icon');
+    if (healthIcons && player) {
+        const currentHits = player.hits || 0;
+        const maxHits = player.maxHits || 5;
+        const remainingHealth = maxHits - currentHits;
+        
+        healthIcons.forEach((icon, index) => {
+            if (index < remainingHealth) {
+                icon.classList.remove('empty');
+            } else {
+                icon.classList.add('empty');
+            }
+        });
     }
     
     // Update wave number
@@ -662,9 +670,14 @@ function gameOver() {
     
     gameState = CONFIG.STATES.GAME_OVER;
     
-    // Update final stats
-    document.getElementById('finalWave').textContent = waveManager.currentWave;
-    document.getElementById('finalScore').textContent = score.toLocaleString();
+    // Calculate final score with bonus
+    const remainingHealth = player.maxHits - player.hits;
+    const healthBonus = remainingHealth * 100;
+    const finalScore = score + healthBonus;
+    
+    // Update final stats with new IDs
+    document.getElementById('finalWaveDisplay').textContent = waveManager.currentWave;
+    document.getElementById('finalScoreDisplay').textContent = finalScore.toLocaleString();
     
     // Show game over screen
     document.getElementById('gameOverScreen').style.display = 'flex';
@@ -694,8 +707,10 @@ function restartGame() {
 
 // Auto Save Score (dipanggil otomatis saat game over)
 function autoSaveScore() {
-    const hpBonus = Math.floor(player.hp * CONFIG.SCORE.REMAINING_HP_MULTIPLIER);
-    const finalScore = score + hpBonus;
+    // Calculate bonus based on remaining health (hits not taken)
+    const remainingHealth = player.maxHits - player.hits;
+    const healthBonus = remainingHealth * 100; // 100 points per remaining health
+    const finalScore = score + healthBonus;
     
     console.log("💾 Auto saving score:", finalScore, "Wave:", waveManager.currentWave);
     
@@ -727,8 +742,10 @@ function autoSaveScore() {
 
 // Save Score (INTEGRATED dengan database) - untuk manual save jika diperlukan
 function saveScore() {
-    const hpBonus = Math.floor(player.hp * CONFIG.SCORE.REMAINING_HP_MULTIPLIER);
-    const finalScore = score + hpBonus;
+    // Calculate bonus based on remaining health (hits not taken)
+    const remainingHealth = player.maxHits - player.hits;
+    const healthBonus = remainingHealth * 100; // 100 points per remaining health
+    const finalScore = score + healthBonus;
     
     console.log("💾 Saving score:", finalScore, "Wave:", waveManager.currentWave);
     

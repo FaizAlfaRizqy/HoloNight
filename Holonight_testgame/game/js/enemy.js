@@ -267,7 +267,8 @@ class Enemy {
     // ✅ FIX: Improved takeDamage dengan cooldown dan knockback yang lebih baik
     takeDamage(damage, playerX) {
         if (this.isDead) return false;
-        // Hit cooldown logic - cegah spam damage
+
+        // ✅ Hit cooldown logic - cegah spam damage
         const now = Date.now();
         if (now - this.lastHitTime < this.hitCooldown) {
             // Masih cooldown, tidak bisa kena hit lagi
@@ -275,9 +276,11 @@ class Enemy {
             return false;
         }
         this.lastHitTime = now;
-        // Knockback yang lebih kuat (vertical)
+
+        // ✅ Knockback yang lebih kuat (vertical)
         this.velocityY = -6; // Vertical knockback
-        // Knockback horizontal berdasarkan posisi player
+
+        // ✅ Knockback horizontal berdasarkan posisi player
         if (playerX !== undefined) {
             if (this.x < playerX) {
                 this.velocityX = -8; // Push left
@@ -285,8 +288,11 @@ class Enemy {
                 this.velocityX = 8; // Push right
             }
         }
+
         // Terima damage
         this.hp -= damage;
+        console.log(`💥 ${this.type} took ${damage} damage! HP: ${this.hp}/${this.maxHp}`);
+
         if (this.hp <= 0) {
             this.hp = 0;
             this.isDead = true;
@@ -297,6 +303,7 @@ class Enemy {
             console.log(`☠️ ${this.type} killed!`);
             return true; // Enemy killed
         }
+
         return true; // Enemy kena hit, tapi belum mati
     }
     
@@ -340,13 +347,14 @@ class Enemy {
         ctx.save();
 
         // Flip sprite based on direction
+        // SPRITE DEFAULT MENGHADAP KIRI, jadi dibalik logikanya
         if (this.isFacingRight) {
-            // Menghadap kanan (default), tidak di-flip
-            ctx.translate(this.x, this.y);
-        } else {
-            // Menghadap kiri, flip horizontal
+            // Menghadap kanan, FLIP sprite (karena default kiri)
             ctx.translate(this.x + this.width, this.y);
             ctx.scale(-1, 1);
+        } else {
+            // Menghadap kiri (default), TIDAK di-flip
+            ctx.translate(this.x, this.y);
         }
 
         // Draw sprite based on type and state
