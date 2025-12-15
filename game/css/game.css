@@ -1,0 +1,554 @@
+/* =============================================================================
+   HOLLOW KNIGHT - FULLSCREEN GAME
+============================================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'Cinzel';
+    src: url('../../fonts/Cinzel-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Cinzel', serif;
+    background:  #000000;
+    color: #ffffff;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Canvas - Fullscreen */
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #16213e;
+}
+
+/* HUD / Stats Bar (top center) */
+.stats-bar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    color: #ffffff;
+    pointer-events: none; /* Allow clicks to pass through except children */
+}
+
+.stats-bar .stat-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+}
+
+.health-container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.health-icon {
+    width: 36px;
+    height: auto;
+    display: block;
+}
+
+.health-icon.empty {
+    opacity: 0.18;
+    filter: grayscale(100%);
+}
+
+/* Controls bar (bottom center) */
+.controls-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.controls-text {
+    pointer-events: auto;
+    background: rgba(0,0,0,0.5);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* UI Left image (fixed on top-left) */
+.ui-left-image {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 11;
+    width: 200px;
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+}
+
+@media (max-width: 768px) {
+    .ui-left-image {
+        width: 90px;
+        top: 12px;
+        left: 12px;
+    }
+}
+
+/* =============================================================================
+   MINIMAL HUD - TOP LEFT (Hollow Knight Style)
+============================================================================= */
+.stats-overlay {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Player Name - Hidden in fullscreen */
+.player-name {
+    display: none;
+}
+
+/* Stat Items - Minimal Layout */
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-label {
+    display: none; /* Hide labels for minimal UI */
+}
+
+.stat-value {
+    font-size: 35px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
+    font-family: 'Cinzel', serif;
+}
+
+.health-value {
+    display: none; /* Hide numeric health */
+}
+
+/* Health Icons - Hollow Knight Style */
+.health-container {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start;
+    align-items: flex-start;
+    z-index: 1300;
+    margin-right: 1000px;
+}
+
+.health-icon {
+    width: 40px;
+    height: 50px;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+    transition: opacity 0.3s ease;
+}
+
+.health-icon.empty {
+    opacity: 0.3;
+    filter: grayscale(100%) drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+}
+
+/* Position score group below health icons */
+.score-group {
+    position: fixed !important;
+    top: calc(18px + 50px + 8px) !important;
+    left: 8px !important;
+    z-index: 1200 !important;
+    text-align: left;
+    display: flex !important;
+    flex-direction: row !important; /* force horizontal layout: icon + score */
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+/* Score icon and text styling */
+.score-group {
+    /* redundant properties kept for safety */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-icon {
+    width: 28px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(1px 2px 4px rgba(0,0,0,0.7));
+}
+
+.score-text .stat-label {
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.9);
+}
+
+.score-text .stat-value {
+    font-size: 36px !important;
+    font-weight: 600;
+    color: #8ab4d5;
+    font-family: 'Cinzel', serif;
+}
+
+.score-text {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+/* Ensure score number stays inline next to icon */
+.score-text .stat-value {
+    display: inline-block !important;
+    line-height: 1 !important;
+}
+
+/* =============================================================================
+   CONTROLS OVERLAY - BOTTOM CENTER (Minimal & Fade Out)
+============================================================================= */
+.controls-overlay {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 8px 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.controls-overlay:hover {
+    opacity: 1;
+}
+
+/* =============================================================================
+   GAME OVER SCREEN
+============================================================================= */
+/* CREEPY GAME OVER SCREEN */
+.game-over-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: bloodFadeIn 2s ease-in;
+}
+
+@keyframes bloodFadeIn {
+    from {
+        opacity: 0;
+        background: #660000;
+    }
+    to {
+        opacity: 1;
+        background: #000000;
+    }
+}
+
+.game-over-content {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    animation: fadeInSlow 1.5s ease-in;
+    padding-top: 80px;
+}
+
+@keyframes fadeInSlow {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Creepy "GAME OVER" Title */
+.game-over-title {
+    font-size: 140px;
+    font-weight: 900;
+    color: #ff0000;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 40px #ff0000,
+        0 0 80px #8b0000,
+        0 0 120px #8b0000,
+        5px 5px 0px #000000,
+        10px 10px 20px rgba(139, 0, 0, 0.8);
+    animation: glitchShake 0.3s infinite, bloodPulse 2s infinite;
+    letter-spacing: 20px;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 0;
+}
+
+/* Blood Drip Effect */
+.blood-drip {
+    display: none;
+}
+
+/* Stats Container - Score and Wave Side by Side */
+.stats-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 80px;
+    margin: 20px 0;
+}
+
+/* Score & Wave Display */
+.game-over-score, .game-over-wave {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.score-label, .wave-label {
+    font-size: 16px;
+    color: #555555;
+    letter-spacing: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.score-value, .wave-value {
+    font-size: 80px;
+    color: #ff0000;
+    font-weight: 900;
+    text-shadow: 
+        0 0 20px #ff0000,
+        0 0 40px #8b0000,
+        3px 3px 0px #000000;
+    animation: numberGlow 2s ease-in-out infinite;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 5px;
+}
+
+.game-over-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Creepy Death Buttons */
+.btn-death {
+    padding: 15px 45px;
+    font-size: 18px;
+    font-weight: 700;
+    background: transparent;
+    color: #ff0000;
+    border: 3px solid #ff0000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    letter-spacing: 3px;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+}
+
+.btn-death:hover {
+    background: #ff0000;
+    color: #000000;
+    box-shadow: 0 0 40px #ff0000, 0 0 20px #ff0000 inset;
+    transform: scale(1.08);
+    letter-spacing: 5px;
+}
+
+.btn-game {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: 'Arial', sans-serif;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-game:hover {
+    background: rgba(138, 180, 213, 0.3);
+    border-color: #8ab4d5;
+    box-shadow: 0 0 20px rgba(138, 180, 213, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-game:active {
+    transform: translateY(0);
+}
+
+.btn-game:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =============================================================================
+   CREEPY ANIMATIONS
+============================================================================= */
+
+@keyframes glitchShake {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-3px, 2px) rotate(-0.5deg); }
+    20% { transform: translate(3px, -2px) rotate(0.5deg); }
+    30% { transform: translate(-4px, 1px) rotate(-0.8deg); }
+    40% { transform: translate(4px, -1px) rotate(0.8deg); }
+    50% { transform: translate(-2px, 3px) rotate(-0.3deg); }
+    60% { transform: translate(2px, -3px) rotate(0.3deg); }
+    70% { transform: translate(-3px, -2px) rotate(-0.6deg); }
+    80% { transform: translate(3px, 2px) rotate(0.6deg); }
+    90% { transform: translate(-1px, -1px) rotate(-0.2deg); }
+}
+
+@keyframes bloodPulse {
+    0%, 100% { 
+        text-shadow: 
+            0 0 10px #ff0000,
+            0 0 20px #ff0000,
+            0 0 40px #ff0000,
+            0 0 80px #8b0000,
+            0 0 120px #8b0000,
+            5px 5px 0px #000000,
+            10px 10px 20px rgba(139, 0, 0, 0.8);
+    }
+    50% { 
+        text-shadow: 
+            0 0 20px #ff0000,
+            0 0 40px #ff0000,
+            0 0 80px #ff0000,
+            0 0 120px #8b0000,
+            0 0 180px #8b0000,
+            5px 5px 0px #000000,
+            10px 10px 40px rgba(139, 0, 0, 1);
+    }
+}
+
+@keyframes drip {
+    0%, 100% {
+        height: 80px;
+        opacity: 0.9;
+    }
+    50% {
+        height: 130px;
+        opacity: 0.5;
+    }
+}
+
+@keyframes numberGlow {
+    0%, 100% {
+        text-shadow: 
+            0 0 20px #ff0000,
+            0 0 40px #8b0000,
+            3px 3px 0px #000000;
+    }
+    50% {
+        text-shadow: 
+            0 0 35px #ff0000,
+            0 0 70px #8b0000,
+            3px 3px 0px #000000;
+    }
+}
+
+/* =============================================================================
+   FULLSCREEN IMMERSIVE ENHANCEMENTS
+============================================================================= */
+
+/* Remove any padding/margin from body and html */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Make canvas truly fullscreen */
+#gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+/* Fade in animation for stats */
+.stats-overlay {
+    animation: fadeInStats 1s ease;
+}
+
+@keyframes fadeInStats {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Wave transition text styling */
+.wave-transition-text {
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+}
+
+/* Health bar glow effect when low */
+.health-bar-fill[style*="width: 2"] {
+    animation: healthPulse 0.5s infinite;
+}
+
+@keyframes healthPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 0, 0, 1);
+    }
+}
