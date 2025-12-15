@@ -57,7 +57,8 @@ const Assets = {
     // Hero Sprites
     hero: {
         idle: [],
-        attack: []
+        attack: [],
+        splash: []
     },
     
     // Enemy Sprites
@@ -78,7 +79,8 @@ const Assets = {
         background: null,
         foreground: null,
         platform: null,
-        floor: null
+        floor: null,
+        barrel: null
     },
     
     // Loading state
@@ -115,6 +117,9 @@ function updateLoadingProgress() {
     if (Assets.loaded === Assets.total) {
         Assets.isReady = true;
         console.log("✅ All assets loaded!");
+        console.log(`   - Hero idle: ${Assets.hero.idle.length} frames`);
+        console.log(`   - Hero attack: ${Assets.hero.attack.length} frames`);
+        console.log(`   - Hero splash: ${Assets.hero.splash.length} frames`);
         initGame();
     }
 }
@@ -144,6 +149,20 @@ async function loadAssets() {
         Assets.hero.attack.push(img);
     }
     
+    // Hero Splash Attack Effect (2 frames)
+    console.log('📦 Loading splash animations...');
+    const splash1 = await loadImage(`../src/game/hero/splash_2/splash-2_01.png`);
+    if (splash1) {
+        Assets.hero.splash.push(splash1);
+        console.log('✅ Splash frame 1 loaded');
+    }
+    const splash2 = await loadImage(`../src/game/hero/splash_2/splash-2_02.png`);
+    if (splash2) {
+        Assets.hero.splash.push(splash2);
+        console.log('✅ Splash frame 2 loaded');
+    }
+    console.log('📦 Total splash frames loaded:', Assets.hero.splash.length);
+    
     // Crawlid Walk Animation (4 frames)
     for (let i = 1; i <= 4; i++) {
         const img = await loadImage(`../src/game/crawlid/walk/crawlid_0${i}.png`);
@@ -169,7 +188,7 @@ async function loadAssets() {
     }
 
     // Boss Idle Animation (5 frames)
-    Assets.enemies.boss = { idle: [], attack: [], die: [] };
+    Assets.enemies.boss = { idle: [], attack: [], die: [], jump: [] };
     for (let i = 1; i <= 5; i++) {
         const img = await loadImage(`../src/game/boss/idle/idle_0${i}.png`);
         Assets.enemies.boss.idle.push(img);
@@ -181,6 +200,12 @@ async function loadAssets() {
         Assets.enemies.boss.attack.push(img);
     }
 
+    // Boss Jump Animation (7 frames)
+    for (let i = 1; i <= 7; i++) {
+        const img = await loadImage(`../src/game/boss/jump/jump_0${i}.png`);
+        if (img) Assets.enemies.boss.jump.push(img);
+    }
+
     // Boss Die Animation (1 frame, fallback)
     const bossDie = await loadImage(`../src/game/boss/die/die_01.png`);
     if (bossDie) Assets.enemies.boss.die.push(bossDie);
@@ -190,6 +215,7 @@ async function loadAssets() {
     Assets.environment.foreground = await loadImage(`../src/game/foreground/foreground.png`);
     Assets.environment.platform = await loadImage(`../src/game/platform/platform.png`);
     Assets.environment.floor = await loadImage(`../src/game/object/floor_6.png`);
+    Assets.environment.barrel = await loadImage(`../src/game/object/barrel.png`);
 }
 
 // =============================================================================
@@ -197,6 +223,7 @@ async function loadAssets() {
 // =============================================================================
 let player;
 let enemies = [];
+let barrels = []; // Barrel objects for boss wave
 let currentWave = 1;
 let enemiesKilledThisWave = 0;
 let score = 0;
@@ -213,6 +240,16 @@ const waveManager = {
     transitionTimer: 0,
     spawnTimer: 0,
     spawnDelay: CONFIG.WAVE.SPAWN_DELAY
+};
+
+// Barrel Spawn System (for boss waves)
+const barrelSpawner = {
+    isActive: false,
+    spawnTimer: 0,
+    spawnInterval: 90, // Spawn 3 barrels every 1.5 seconds (90 frames at 60fps)
+    minX: 100, // Minimum x position for spawn
+    maxX: 800, // Maximum x position for spawn
+    barrelCount: 3 // Number of barrels to spawn at once
 };
 
 // =============================================================================
@@ -285,6 +322,15 @@ function startWave(waveNumber) {
     if (isBossWave) {
         console.log("👑 BOSS WAVE!");
         waveManager.enemiesRequired = 1; // Only 1 boss
+        
+        // Activate barrel spawner for boss wave
+        barrelSpawner.isActive = true;
+        barrelSpawner.spawnTimer = 0;
+        console.log("🛢️ Barrel spawner activated!");
+    } else {
+        // Deactivate barrel spawner for normal waves
+        barrelSpawner.isActive = false;
+        barrels = []; // Clear existing barrels
     }
     
     console.log(`👾 Enemies to spawn: ${waveManager.enemiesRequired}`);
@@ -474,6 +520,44 @@ function update(deltaTime) {
         // For now keep them for visual feedback
     }
     
+    // Update barrels (boss wave hazard)
+    if (barrelSpawner.isActive) {
+        // Spawn new barrels
+        barrelSpawner.spawnTimer += deltaTime;
+        if (barrelSpawner.spawnTimer >= barrelSpawner.spawnInterval) {
+            barrelSpawner.spawnTimer = 0;
+            
+            // Spawn 3 barrels at random locations simultaneously
+            const spawnedPositions = [];
+            for (let i = 0; i < barrelSpawner.barrelCount; i++) {
+                // Generate random x position within bounds
+                let spawnX;
+                let attempts = 0;
+                do {
+                    spawnX = Math.floor(Math.random() * (barrelSpawner.maxX - barrelSpawner.minX)) + barrelSpawner.minX;
+                    attempts++;
+                } while (spawnedPositions.some(pos => Math.abs(pos - spawnX) < 80) && attempts < 10); // Ensure barrels aren't too close (min 80px apart)
+                
+                spawnedPositions.push(spawnX);
+                const barrel = new Barrel(spawnX);
+                barrels.push(barrel);
+            }
+            console.log('🛢️×3 Barrels spawned at:', spawnedPositions);
+        }
+    }
+    
+    // Update all barrels
+    for (let i = barrels.length - 1; i >= 0; i--) {
+        const barrel = barrels[i];
+        barrel.update(deltaTime);
+        barrel.checkPlayerCollision(player);
+        
+        // Remove inactive barrels
+        if (!barrel.isActive) {
+            barrels.splice(i, 1);
+        }
+    }
+    
     // Check collisions
     checkPlayerAttackCollisions();
     
@@ -535,6 +619,11 @@ function draw() {
     // Draw enemies (behind player)
     for (let enemy of enemies) {
         enemy.draw(ctx);
+    }
+    
+    // Draw barrels (falling hazards)
+    for (let barrel of barrels) {
+        barrel.draw(ctx, Assets);
     }
     
     // Draw player
@@ -692,14 +781,19 @@ function gameOver() {
 function restartGame() {
     console.log("🔄 Restarting game...");
     
-    // Clear enemies
+    // Clear enemies and barrels
     enemies = [];
+    barrels = [];
     
     // Reset wave manager
     waveManager.currentWave = 1;
     waveManager.enemiesSpawned = 0;
     waveManager.enemiesKilled = 0;
     waveManager.isTransitioning = false;
+    
+    // Reset barrel spawner
+    barrelSpawner.isActive = false;
+    barrelSpawner.spawnTimer = 0;
     
     // Reinitialize
     initGame();

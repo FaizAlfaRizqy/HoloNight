@@ -97,6 +97,7 @@ $user = getCurrentUser();
     <script src="js/config.js"></script>
     <script src="js/player.js"></script>
     <script src="js/enemy.js"></script>
+    <script src="js/barrel.js"></script>
     <script src="js/game.js"></script>
 </body>
 </html>

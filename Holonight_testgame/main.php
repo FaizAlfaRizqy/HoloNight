@@ -46,7 +46,7 @@ $user = getCurrentUser();
     <!-- Content Section -->
     <section class="content-section">
         <!-- Hallownest Card -->
-        <div class="story-card">
+        <div class="story-card scroll-animate-left">
             <img src="src/img/Halonest.png" alt="Hallownest Map" class="story-image">
             <div class="story-content">
                 <h2>Hallownest</h2>
@@ -55,7 +55,7 @@ $user = getCurrentUser();
         </div>
 
         <!-- Carousel Story Cards -->
-        <div class="story-card carousel-card">
+        <div class="story-card carousel-card scroll-animate-right">
             <button class="carousel-arrow left-arrow">
                 <img src="src/img/right.png" alt="Next">
             </button>
@@ -105,7 +105,7 @@ $user = getCurrentUser();
     </section>
 
     <!-- Auto Slider Section -->
-    <section class="slider-section">
+    <section class="slider-section scroll-animate">
         <div class="slider-container">
             <div class="slider-track">
                 <img src="src/img/slider1.png" alt="Slider 1" class="slider-image">
@@ -128,12 +128,12 @@ $user = getCurrentUser();
     </section>
 
     <!-- Heroes Section -->
-    <section class="heroes-section">
+    <section class="heroes-section scroll-animate-scale">
         <img src="src/img/heroes.png" alt="Heroes" class="heroes-image">
     </section>
 
     <!-- Character Info Section -->
-    <section class="character-info-section">
+    <section class="character-info-section scroll-animate">
         <img src="src/img/CharIntro.png" alt="Character Intro Background" class="char-intro-bg">
         
         <div class="character-content">
@@ -148,7 +148,7 @@ $user = getCurrentUser();
             </div>
             
             <div class="character-bottom">
-                <img src="src/img/ZaHornet.png" alt="Character" class="character-main" id="charMain">
+                <img src="src/img/ZaHornet.gif" alt="Character" class="character-main" id="charMain">
                 
                 <!-- Character Attributes -->
                 <div class="character-attributes">
@@ -170,13 +170,13 @@ $user = getCurrentUser();
     </section>
     
     <!-- All Characters Title Section -->
-    <section class="all-characters-section">
+    <section class="all-characters-section scroll-animate">
         <h2 class="diagonal-title">All Characters</h2>
         <img src="src/img/line1.png" alt="Separator" class="diagonal-separator">
     </section>
 
     <!-- Diagonal Slider Section -->
-    <section class="diagonal-slider-section">
+    <section class="diagonal-slider-section scroll-animate-scale">
         <div class="diagonal-slider-container">
             <!-- Slider 1 -->
             <div class="diagonal-column" data-direction="down">
@@ -254,7 +254,7 @@ $user = getCurrentUser();
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer scroll-animate">
         <div class="footer-content">
             <div class="footer-left">
                 <h3>Hollow Knight</h3>
@@ -328,7 +328,7 @@ $user = getCurrentUser();
         const characterData = [
             {
                 preview: 'src/vid/HorNeitPrev.mp4',
-                main: 'src/img/ZaHornet.png',
+                main: 'src/img/ZaHornet.gif',
                 title: 'myHornet',
                 desc1: 'Hornet is the mysterious princess-protector of Hallownest\'s ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.',
                 desc2: 'Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.'
@@ -397,6 +397,30 @@ $user = getCurrentUser();
 
         // Initialize first character
         updateCharacter(0);
+
+        // ============================================================================
+        // SCROLL ENTRANCE ANIMATIONS
+        // ============================================================================
+        const scrollAnimateElements = document.querySelectorAll(
+            '.scroll-animate, .scroll-animate-left, .scroll-animate-right, .scroll-animate-scale'
+        );
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: unobserve after animation to improve performance
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of element is visible
+            rootMargin: '0px 0px -100px 0px' // Trigger slightly before element enters viewport
+        });
+
+        scrollAnimateElements.forEach(element => {
+            scrollObserver.observe(element);
+        });
     </script>
 </body>
 </html>

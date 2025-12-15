@@ -34,6 +34,7 @@ class Player {
         this.lastAttackTime = 0;
         this.attackDuration = CONFIG.PLAYER.ATTACK_DURATION;
         this.attackStartTime = 0;
+        this.canAttack = true; // Flag to prevent attack spam
         
         // ✅ FIX: Track enemies hit in current attack
         this.enemiesHitThisAttack = new Set(); // Store enemy IDs that were hit
@@ -43,6 +44,11 @@ class Player {
         this.frameCounter = 0;
         this.animationSpeed = 8;
         this.state = 'idle'; // idle, attack
+        
+        // Splash animation
+        this.splashFrame = 0;
+        this.splashFrameCounter = 0;
+        this.splashAnimationSpeed = 4; // Faster splash animation
 
         // Input
         this.keys = {};
@@ -132,8 +138,10 @@ class Player {
         // Z = attack
         const currentTime = Date.now();
         const cooldownPassed = currentTime - this.lastAttackTime > CONFIG.PLAYER.ATTACK_COOLDOWN;
+        const attackKeyPressed = this.keys['z'] || this.keys['Z'];
 
-        if ((this.keys['z'] || this.keys['Z']) && !this.isAttacking && cooldownPassed) {
+        // Start attack only if key pressed, can attack, not currently attacking, and cooldown passed
+        if (attackKeyPressed && this.canAttack && !this.isAttacking && cooldownPassed) {
             this.isAttacking = true;
             this.state = 'attack';
             this.attackStartTime = currentTime;
@@ -141,12 +149,25 @@ class Player {
             this.currentFrame = 0;
             this.frameCounter = 0;
             this.animationSpeed = 6; // Faster attack animation
+            this.canAttack = false; // Prevent spam until key is released
             
             // ✅ FIX: Clear set when starting new attack
             this.enemiesHitThisAttack.clear();
             
             if (typeof playSound === 'function' && window.Sounds) playSound(Sounds.sword);
             console.log('⚔️ Attack started!');
+            
+            // Debug: Check splash availability
+            if (typeof Assets !== 'undefined' && Assets.hero && Assets.hero.splash) {
+                console.log('🎨 Splash frames available:', Assets.hero.splash.length);
+            } else {
+                console.warn('⚠️ Assets.hero.splash NOT available at attack time!');
+            }
+        }
+        
+        // Reset canAttack when key is released
+        if (!attackKeyPressed) {
+            this.canAttack = true;
         }
     }
     
@@ -204,6 +225,18 @@ class Player {
                 // Idle has 5 frames
                 this.currentFrame = (this.currentFrame + 1) % 5;
             }
+        }
+        
+        // Update splash animation when attacking
+        if (this.isAttacking) {
+            this.splashFrameCounter++;
+            if (this.splashFrameCounter >= this.splashAnimationSpeed) {
+                this.splashFrameCounter = 0;
+                this.splashFrame = (this.splashFrame + 1) % 2; // Loop through 2 splash frames
+            }
+        } else {
+            this.splashFrame = 0;
+            this.splashFrameCounter = 0;
         }
     }
     
@@ -264,15 +297,42 @@ class Player {
         
         ctx.restore();
         
-        // Draw attack hitbox (debug/visual)
+        // Draw splash attack animation
         if (this.isAttacking) {
+            console.log('🔍 Attack state - assets:', !!assets, 'hero:', !!assets?.hero, 'splash:', !!assets?.hero?.splash, 'length:', assets?.hero?.splash?.length);
+        }
+        
+        if (this.isAttacking && assets.hero.splash && assets.hero.splash.length > 0) {
             const hitbox = this.getAttackHitbox();
-            ctx.fillStyle = 'rgba(255, 235, 59, 0.3)';
-            ctx.fillRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            const splashSprite = assets.hero.splash[this.splashFrame];
             
-            ctx.strokeStyle = CONFIG.COLORS.PLAYER_ATTACK;
-            ctx.lineWidth = 3;
-            ctx.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            // Debug: Log splash rendering attempt
+            if (this.splashFrame === 0) {
+                console.log('🎨 Rendering splash animation - Frame:', this.splashFrame, 'Sprite loaded:', !!splashSprite);
+            }
+            
+            if (splashSprite && splashSprite.complete) {
+                ctx.save();
+                
+                // Position splash at hitbox location
+                if (this.isFacingRight) {
+                    ctx.translate(hitbox.x, hitbox.y);
+                } else {
+                    // Flip horizontally for left-facing attack
+                    ctx.translate(hitbox.x + hitbox.width, hitbox.y);
+                    ctx.scale(-1, 1);
+                }
+                
+                // Draw splash sprite
+                ctx.drawImage(splashSprite, 0, 0, hitbox.width, hitbox.height);
+                
+                ctx.restore();
+            } else {
+                // Debug: If splash sprite not loaded, log warning
+                if (this.splashFrame === 0) {
+                    console.warn('⚠️ Splash sprite not loaded or incomplete');
+                }
+            }
         }
         
     }

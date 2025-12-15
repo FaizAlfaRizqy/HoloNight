@@ -64,6 +64,15 @@ class Enemy {
             this.baseY = y;
             this.gravity = 0; // Flying enemies don't fall
         }
+        
+        // Boss jump specific
+        if (this.type === 'boss') {
+            this.jumpPower = 12; // Jump strength
+            this.canJump = true;
+            this.isJumping = false;
+            this.jumpCooldown = 0; // Cooldown between jumps
+            this.jumpCooldownTime = 120; // 2 seconds at 60fps
+        }
     }
     
     setDimensionsByType() {
@@ -136,6 +145,11 @@ class Enemy {
             this.updateDeathAnimation();
             return;
         }
+        
+        // Update boss jump cooldown
+        if (this.type === 'boss' && this.jumpCooldown > 0) {
+            this.jumpCooldown -= deltaTime;
+        }
 
         // Update AI
         this.updateAI(player);
@@ -195,6 +209,25 @@ class Enemy {
         }
         // Selalu update arah sesuai velocityX
         this.isFacingRight = this.velocityX > 0;
+        
+        // Boss jump logic - jump when distance is far enough
+        if (this.type === 'boss') {
+            const distanceToPlayer = Math.abs(this.x - player.x);
+            const verticalDistance = Math.abs(this.y - player.y);
+            
+            // Jump if: on ground, can jump, distance is medium-far (200-400px), not too high above player
+            if (this.isOnGround && this.canJump && this.jumpCooldown <= 0 && 
+                distanceToPlayer > 200 && distanceToPlayer < 500 && verticalDistance < 150) {
+                this.velocityY = -this.jumpPower;
+                this.isOnGround = false;
+                this.isJumping = true;
+                this.canJump = false;
+                this.jumpCooldown = this.jumpCooldownTime;
+                this.state = 'jump';
+                this.currentFrame = 0;
+                console.log('👑 Boss jump!');
+            }
+        }
     }
     
     updateFlyingMovement() {
@@ -209,6 +242,14 @@ class Enemy {
             
             if (this.velocityY > CONFIG.PHYSICS.MAX_FALL_SPEED) {
                 this.velocityY = CONFIG.PHYSICS.MAX_FALL_SPEED;
+            }
+        } else {
+            // Reset jump when landing
+            if (this.type === 'boss' && this.isJumping) {
+                this.isJumping = false;
+                this.canJump = true;
+                this.state = 'walk';
+                this.currentFrame = 0;
             }
         }
     }
@@ -316,6 +357,13 @@ class Enemy {
             if (this.state === 'walk') {
                 // Crawlid has 4 walk frames
                 this.currentFrame = (this.currentFrame + 1) % 4;
+            } else if (this.state === 'jump') {
+                // Jump animation (7 frames for boss)
+                if (this.currentFrame < 6) {
+                    this.currentFrame++;
+                } else {
+                    this.currentFrame = 6; // Hold last frame
+                }
             } else if (this.state === 'die') {
                 // Death animation
                 if (this.currentFrame < 2) { // Assuming 3 death frames
@@ -386,6 +434,8 @@ class Enemy {
                     spriteArray = Assets.enemies.boss.die;
                 } else if (this.state === 'attack') {
                     spriteArray = Assets.enemies.boss.attack;
+                } else if (this.state === 'jump') {
+                    spriteArray = Assets.enemies.boss.jump;
                 } else {
                     spriteArray = Assets.enemies.boss.idle;
                 }
