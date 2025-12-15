@@ -23,7 +23,7 @@ $user = getCurrentUser();
             <img src="src/img/hamburger.jpg" alt="Menu">
         </button>
         <div class="nav-container" id="navContainer">
-            <a href="main.php" class="nav-link">HOME</a>
+            <a href="index.php" class="nav-link">HOME</a>
             <a href="leaderboard.php" class="nav-link">LEADERBOARD</a>
             <a href="howtoplay.php" class="nav-link active">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>

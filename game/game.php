@@ -76,9 +76,9 @@ $user = getCurrentUser();
             </div>
             
             <div class="game-over-buttons">
-                <button class="btn-death" onclick="saveScore()">SAVE</button>
+                <!-- <button class="btn-death" onclick="saveScore()">SAVE</button> -->
                 <button class="btn-death" onclick="restartGame()">RETRY</button>
-                <a href="../main.php" class="btn-death">ESCAPE</a>
+                <a href="../index.php" class="btn-death">ESCAPE</a>
             </div>
         </div>
     </div>
