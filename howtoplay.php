@@ -81,11 +81,11 @@ $user = getCurrentUser();
                 <div class="rules">
                     <div class="rule-item">
                         <span class="number">1.</span>
-                        <span class="rule-text">Get as many point as you can in 150 seconds</span>
+                        <span class="rule-text">Get as many point as you can</span>
                     </div>
                     <div class="rule-item">
                         <span class="number">2.</span>
-                        <span class="rule-text">Boss room will be Unlocked once you get 1000 points</span>
+                        <span class="rule-text">Boss will appear every 5 waves</span>
                     </div>
                     <div class="rule-item">
                         <span class="number">3.</span>

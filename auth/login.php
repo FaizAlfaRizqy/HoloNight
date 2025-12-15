@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['login_time'] = time();
                 
-                // Redirect to main
                 header('Location: ../main.php');
                 exit();
             } else {
@@ -113,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="button-group">
                     <button type="submit" class="btn-confirm">CONFIRM</button>
-                    <a href="../index.html" class="btn-back">BACK</a>
+                    <a href="../main.php" class="btn-back">BACK</a>
                 </div>
             </form>
             
