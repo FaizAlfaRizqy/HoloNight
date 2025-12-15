@@ -123,7 +123,7 @@ class Enemy {
         if (this.type === 'crawlid') {
             return CONFIG.ENEMY.BASE_SPEED;
         } else if (this.type === 'boofly') {
-            return 1; // Atur sesuai keinginan, misal lebih cepat dari crawlid
+            return 0.5; // Atur sesuai keinginan, misal lebih cepat dari crawlid
         } else if (this.type === 'boss') {
             return 0.3; // Atur sesuai keinginan, misal lebih lambat
         } else {
@@ -163,9 +163,9 @@ class Enemy {
             this.applyGravity();
         }
 
-        // Movement update tanpa dikali deltaTime
-        this.x += this.velocityX;
-        this.y += this.velocityY;
+            // Movement update dikali deltaTime (default deltaTime=1 per frame, bisa diubah jika ingin FPS independen)
+            this.x += this.velocityX * deltaTime;
+            this.y += this.velocityY * deltaTime;
 
         // Collision checks
         if (this.type !== 'boofly') {

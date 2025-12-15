@@ -79,9 +79,9 @@ class Player {
         this.applyGravity();
         this.updateAnimation();
 
-        // Movement update tanpa dikali deltaTime agar jump terasa natural
-        this.x += this.velocityX;
-        this.y += this.velocityY;
+            // Movement update dikali deltaTime (default deltaTime=1 per frame, bisa diubah jika ingin FPS independen)
+            this.x += this.velocityX * deltaTime;
+            this.y += this.velocityY * deltaTime;
 
         this.checkPlatformCollision();
         this.constrainToCanvas();

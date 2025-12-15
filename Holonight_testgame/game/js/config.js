@@ -30,14 +30,14 @@ const CONFIG = {
     ENEMY: {
         WIDTH: 45,
         HEIGHT: 60,
-        BASE_SPEED: 0.7,    // Lebih natural untuk per frame
+        BASE_SPEED: 0.4,    // Lebih natural untuk per frame
         BASE_HP: 100,
         BASE_DAMAGE: 10,
         COLOR: '#ff4757',
         SPAWN_MARGIN: 150,
         PATROL_RANGE: 150,
         CHASE_RANGE: 250,
-        CHASE_SPEED_MULTIPLIER: 1.2,
+        CHASE_SPEED_MULTIPLIER: 1.5,
         TOUCH_DAMAGE_COOLDOWN: 1000
     },
     
