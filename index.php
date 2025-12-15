@@ -39,7 +39,7 @@ $user = getCurrentUser();
             
             // Redirect to mobile warning page if mobile OS detected
             if (mobileOS) {
-                const currentPage = window.location.pathname.split('/').pop() || 'main.php';
+                const currentPage = window.location.pathname.split('/').pop() || 'index.php';
                 window.location.href = 'mobile.html?os=' + mobileOS + '&return=' + encodeURIComponent(currentPage);
             }
         })();
@@ -50,7 +50,7 @@ $user = getCurrentUser();
             <img src="src/img/hamburger.jpg" alt="Menu">
         </button>
         <div class="nav-container" id="navContainer">
-            <a href="main.php" class="nav-link active">HOME</a>
+            <a href="index.php" class="nav-link active">HOME</a>
             <a href="leaderboard.php" class="nav-link">LEADERBOARD</a>
             <a href="howtoplay.php" class="nav-link">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>

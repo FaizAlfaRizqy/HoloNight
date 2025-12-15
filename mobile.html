@@ -137,7 +137,7 @@
         // Get OS name from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const osName = urlParams.get('os') || 'mobile device';
-        const returnUrl = urlParams.get('return') || 'index.html';
+        const returnUrl = urlParams.get('return') || 'index.php';
         
         document.getElementById('osName').textContent = osName;
 
@@ -150,7 +150,7 @@
 
         // No button - go back to index
         document.getElementById('btnNo').addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = 'index.php';
         });
     </script>
 </body>

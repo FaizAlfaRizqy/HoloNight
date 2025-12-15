@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['login_time'] = time();
                 
-                header('Location: ../main.php');
+                // Redirect to main
+                header('Location: ../index.php');
                 exit();
             } else {
                 $error = "Zote The Mighty Said:\nPassword atau Username salah bang";
@@ -112,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="button-group">
                     <button type="submit" class="btn-confirm">CONFIRM</button>
-                    <a href="../main.php" class="btn-back">BACK</a>
+                    <a href="../index.php" class="btn-back">BACK</a>
                 </div>
             </form>
             
