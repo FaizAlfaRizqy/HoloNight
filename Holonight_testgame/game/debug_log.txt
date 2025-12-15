@@ -1,6 +1,0 @@
-array (
-  'user_id' => '5',
-  'username' => 'kraksterx',
-  'email' => 'jojo@gmail.com',
-  'login_time' => 1765447826,
-)
