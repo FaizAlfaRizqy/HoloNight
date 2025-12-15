@@ -207,25 +207,23 @@ HoloNight/
   <tr>
     <td align="center">
       <strong>M. Umar Faiz Alfa Rizqy</strong><br/>
-      <sub>Lead Developer</sub>
+      <sub>Frontend Developer</sub>
     </td>
     <td align="center">
       <strong>Nathanael Jovan Wahyudi</strong><br/>
-      <sub>Lead Developer</sub>
+      <sub>Backend Developer</sub>
     </td>
   </tr>
 </table>
 
 ### Contributions
-- **M. Umar Faiz Alfa Rizqy** - Backend development, database design, game mechanics
-- **Nathanael Jovan Wahyudi** - Frontend design, UI/UX, game assets integration
+- **M. Umar Faiz Alfa Rizqy** - Frontend design, UI/UX, game assets integration
+- **Nathanael Jovan Wahyudi** - Backend development, database design, game mechanics
 
 ## 🙏 Acknowledgments
 
 - **Team Cherry** - Original Hollow Knight game creators
 - **Hollow Knight Community** - For inspiration and assets
-- Web Programming Course - For project guidance
-- All sprite and asset contributors from the Hollow Knight fanbase
 
 ## ⚖️ Disclaimer
 
