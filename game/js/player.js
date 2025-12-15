@@ -43,7 +43,7 @@ class Player {
         this.currentFrame = 0;
         this.frameCounter = 0;
         this.animationSpeed = 8;
-        this.state = 'idle'; // idle, attack
+        this.state = 'idle'; // idle, walk, attack
         
         // Splash animation
         this.splashFrame = 0;
@@ -77,11 +77,21 @@ class Player {
         this.handleJump();
         this.handleAttack();
         this.applyGravity();
+
+        // Tentukan state animasi
+        if (this.isAttacking) {
+            this.state = 'attack';
+        } else if (this.velocityX !== 0) {
+            this.state = 'walk';
+        } else {
+            this.state = 'idle';
+        }
+
         this.updateAnimation();
 
-            // Movement update dikali deltaTime (default deltaTime=1 per frame, bisa diubah jika ingin FPS independen)
-            this.x += this.velocityX * deltaTime;
-            this.y += this.velocityY * deltaTime;
+        // Movement update dikali deltaTime (default deltaTime=1 per frame, bisa diubah jika ingin FPS independen)
+        this.x += this.velocityX * deltaTime;
+        this.y += this.velocityY * deltaTime;
 
         this.checkPlatformCollision();
         this.constrainToCanvas();
@@ -211,22 +221,23 @@ class Player {
     
     updateAnimation() {
         this.frameCounter++;
-        
+
+        let maxFrame = 5;
+        if (this.state === 'attack') maxFrame = 2;
+        if (this.state === 'walk') maxFrame = 5;
+
         if (this.frameCounter >= this.animationSpeed) {
             this.frameCounter = 0;
-            
-            if (this.state === 'attack') {
-                this.currentFrame++;
-                // Attack has 2 frames
-                if (this.currentFrame >= 2) {
-                    this.currentFrame = 1; // Hold last frame
+            this.currentFrame++;
+            if (this.currentFrame >= maxFrame) {
+                if (this.state === 'attack') {
+                    this.currentFrame = 1; // Hold last attack frame
+                } else {
+                    this.currentFrame = 0;
                 }
-            } else {
-                // Idle has 5 frames
-                this.currentFrame = (this.currentFrame + 1) % 5;
             }
         }
-        
+
         // Update splash animation when attacking
         if (this.isAttacking) {
             this.splashFrameCounter++;
@@ -272,9 +283,9 @@ class Player {
             const shouldDraw = Math.floor(this.invincibleTimer / 5) % 2 === 0;
             if (!shouldDraw) return;
         }
-        
+
         ctx.save();
-        
+
         // Flip sprite jika menghadap kiri
         if (!this.isFacingRight) {
             ctx.translate(this.x + this.width, this.y);
@@ -282,11 +293,13 @@ class Player {
         } else {
             ctx.translate(this.x, this.y);
         }
-        
-        // Get current sprite
-        const spriteArray = this.state === 'attack' ? assets.hero.attack : assets.hero.idle;
+
+        // Get current sprite array sesuai state
+        let spriteArray = assets.hero.idle;
+        if (this.state === 'attack') spriteArray = assets.hero.attack;
+        else if (this.state === 'walk') spriteArray = assets.hero.walk;
         const currentSprite = spriteArray[this.currentFrame];
-        
+
         if (currentSprite && currentSprite.complete) {
             ctx.drawImage(currentSprite, 0, 0, this.width, this.height);
         } else {
@@ -294,47 +307,25 @@ class Player {
             ctx.fillStyle = CONFIG.PLAYER.COLOR;
             ctx.fillRect(0, 0, this.width, this.height);
         }
-        
+
         ctx.restore();
-        
+
         // Draw splash attack animation
-        if (this.isAttacking) {
-            console.log('🔍 Attack state - assets:', !!assets, 'hero:', !!assets?.hero, 'splash:', !!assets?.hero?.splash, 'length:', assets?.hero?.splash?.length);
-        }
-        
         if (this.isAttacking && assets.hero.splash && assets.hero.splash.length > 0) {
             const hitbox = this.getAttackHitbox();
             const splashSprite = assets.hero.splash[this.splashFrame];
-            
-            // Debug: Log splash rendering attempt
-            if (this.splashFrame === 0) {
-                console.log('🎨 Rendering splash animation - Frame:', this.splashFrame, 'Sprite loaded:', !!splashSprite);
-            }
-            
             if (splashSprite && splashSprite.complete) {
                 ctx.save();
-                
-                // Position splash at hitbox location
                 if (this.isFacingRight) {
                     ctx.translate(hitbox.x, hitbox.y);
                 } else {
-                    // Flip horizontally for left-facing attack
                     ctx.translate(hitbox.x + hitbox.width, hitbox.y);
                     ctx.scale(-1, 1);
                 }
-                
-                // Draw splash sprite
                 ctx.drawImage(splashSprite, 0, 0, hitbox.width, hitbox.height);
-                
                 ctx.restore();
-            } else {
-                // Debug: If splash sprite not loaded, log warning
-                if (this.splashFrame === 0) {
-                    console.warn('⚠️ Splash sprite not loaded or incomplete');
-                }
             }
         }
-        
     }
     
     isAlive() {

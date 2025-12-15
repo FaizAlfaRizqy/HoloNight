@@ -123,9 +123,9 @@ class Enemy {
         if (this.type === 'crawlid') {
             return CONFIG.ENEMY.BASE_SPEED;
         } else if (this.type === 'boofly') {
-            return 0.5; // Atur sesuai keinginan, misal lebih cepat dari crawlid
+            return 1.2; // Atur sesuai keinginan, misal lebih cepat dari crawlid
         } else if (this.type === 'boss') {
-            return 0.3; // Atur sesuai keinginan, misal lebih lambat
+            return 0.8; // Atur sesuai keinginan, misal lebih lambat
         } else {
             return CONFIG.ENEMY.BASE_SPEED;
         }

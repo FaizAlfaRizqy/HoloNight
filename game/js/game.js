@@ -1,4 +1,35 @@
 // =============================================================================
+// PIXEL PERFECT COLLISION UTILITY
+// =============================================================================
+// spriteA, xA, yA, spriteB, xB, yB, width, height
+function pixelPerfectCollision(spriteA, xA, yA, spriteB, xB, yB, width, height) {
+    // Buat offscreen canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+
+    // Draw spriteA
+    ctx.clearRect(0, 0, width, height);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(spriteA, xA < xB ? 0 : xA - xB, yA < yB ? 0 : yA - yB);
+    const imageDataA = ctx.getImageData(0, 0, width, height).data;
+
+    // Draw spriteB with 'destination-in' to get overlap
+    ctx.clearRect(0, 0, width, height);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(spriteB, xB < xA ? 0 : xB - xA, yB < yA ? 0 : yB - yA);
+    const imageDataB = ctx.getImageData(0, 0, width, height).data;
+
+    // Cek overlap pixel alpha > 0 di kedua image
+    for (let i = 0; i < width * height; i++) {
+        if (imageDataA[i * 4 + 3] > 0 && imageDataB[i * 4 + 3] > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+// =============================================================================
 // HOLLOW KNIGHT - WAVE SURVIVAL GAME
 // Main Game Engine dengan Wave System & Asset Integration
 // =============================================================================
@@ -142,7 +173,14 @@ async function loadAssets() {
         const img = await loadImage(`../src/game/hero/idle/idle_0${i}.png`);
         Assets.hero.idle.push(img);
     }
-    
+
+    // Hero Walk Animation (5 frames)
+    for (let i = 1; i <= 5; i++) {
+        const img = await loadImage(`../src/game/hero/walk/walk_0${i}.png`);
+        Assets.hero.walk = Assets.hero.walk || [];
+        Assets.hero.walk.push(img);
+    }
+
     // Hero Attack Animation (2 frames)
     for (let i = 1; i <= 2; i++) {
         const img = await loadImage(`../src/game/hero/attack/attack_0${i}.png`);

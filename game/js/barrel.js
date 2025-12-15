@@ -52,22 +52,49 @@ class Barrel {
         }
     }
     
-    checkPlayerCollision(player) {
+    checkPlayerCollision(player, assets) {
         if (!this.isActive || player.isInvincible) return false;
-        
-        const colliding = 
+
+        // Box collision check (AABB)
+        const boxColliding =
             this.x < player.x + player.width &&
             this.x + this.width > player.x &&
             this.y < player.y + player.height &&
             this.y + this.height > player.y;
-        
-        if (colliding) {
-            console.log('💥 Barrel hit player!');
+
+        if (!boxColliding) return false;
+
+        // Pixel-perfect collision jika kedua sprite tersedia
+        let pixelColliding = true;
+        if (
+            assets && assets.environment && assets.environment.barrel && assets.environment.barrel.complete &&
+            assets.hero && assets.hero.idle && assets.hero.idle.length > 0 && assets.hero.idle[0].complete
+        ) {
+            // Ambil frame idle player (asumsi frame 0)
+            const playerSprite = assets.hero.idle[0];
+            const barrelSprite = assets.environment.barrel;
+            // Hitung overlap area
+            const overlapX = Math.max(this.x, player.x);
+            const overlapY = Math.max(this.y, player.y);
+            const overlapW = Math.min(this.x + this.width, player.x + player.width) - overlapX;
+            const overlapH = Math.min(this.y + this.height, player.y + player.height) - overlapY;
+            if (overlapW > 0 && overlapH > 0) {
+                pixelColliding = pixelPerfectCollision(
+                    barrelSprite, this.x, this.y,
+                    playerSprite, player.x, player.y,
+                    overlapW, overlapH
+                );
+            } else {
+                pixelColliding = false;
+            }
+        }
+
+        if (pixelColliding) {
+            console.log('💥 Barrel hit player! (pixel-perfect)');
             player.takeDamage(this.damage);
             this.isActive = false; // Destroy barrel on impact
             return true;
         }
-        
         return false;
     }
     
