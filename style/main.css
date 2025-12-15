@@ -672,7 +672,6 @@ body {
     height: auto;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease;
     margin-bottom: -110px; /* Negative margin untuk mengurangi gap visual */
 }

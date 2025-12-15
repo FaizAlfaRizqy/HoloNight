@@ -410,11 +410,11 @@ class Enemy {
 
         ctx.restore();
 
-        // Draw HP bar (only if alive)
-        if (!this.isDead) {
-            this.drawHealthBar(ctx);
-            this.drawDebugInfo(ctx);
-        }
+        // Draw HP bar and debug info disabled
+        // if (!this.isDead) {
+        //     this.drawHealthBar(ctx);
+        //     this.drawDebugInfo(ctx);
+        // }
     }
     
     drawSprite(ctx) {

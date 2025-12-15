@@ -87,6 +87,7 @@ $leaderboard_result = mysqli_query($koneksi, $leaderboard_query);
         <div class="nav-container">
             <a href="main.php" class="nav-link">HOME</a>
             <a href="leaderboard.php" class="nav-link active">LEADERBOARD</a>
+            <a href="howtoplay.php" class="nav-link">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>
         </div>
     </nav>
