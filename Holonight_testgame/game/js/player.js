@@ -12,7 +12,7 @@ class Player {
         // Movement
         this.velocityX = 0;
         this.velocityY = 0;
-        this.speed = CONFIG.PLAYER.SPEED;
+        this.speed = CONFIG.PLAYER.SPEED; // Speed player selalu konstan dari config
         this.isOnGround = false;
         this.isFacingRight = true;
         
@@ -109,13 +109,13 @@ class Player {
     
     handleMovement() {
         this.velocityX = 0;
-        
+        // Speed player selalu konstan dari config, tidak ada multiplier
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
-            this.velocityX = -this.speed;
+            this.velocityX = -CONFIG.PLAYER.SPEED;
             this.isFacingRight = false;
         }
         if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
-            this.velocityX = this.speed;
+            this.velocityX = CONFIG.PLAYER.SPEED;
             this.isFacingRight = true;
         }
     }

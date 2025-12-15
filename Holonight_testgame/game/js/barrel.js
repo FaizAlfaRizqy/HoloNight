@@ -13,7 +13,7 @@ class Barrel {
         // Physics
         this.velocityY = 2; // Initial fall speed
         this.gravity = 0.3;
-        this.maxFallSpeed = 12;
+        this.maxFallSpeed = 5;
         
         // State
         this.isActive = true;

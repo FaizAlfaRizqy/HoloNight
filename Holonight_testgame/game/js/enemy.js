@@ -106,7 +106,7 @@ class Enemy {
         } else if (this.type === 'boofly') {
             baseHitsNeeded = 1; // 1 hit untuk boofly
         } else if (this.type === 'boss') {
-            baseHitsNeeded = 5; // 5 hits untuk boss
+            baseHitsNeeded = 10; // 5 hits untuk boss
         }
         
         // ✅ Tambahan hits setiap kelipatan 10 wave
@@ -119,14 +119,16 @@ class Enemy {
     }
     
     calculateSpeed(wave) {
-        const baseSpeed = CONFIG.ENEMY.BASE_SPEED;
-        const increase = CONFIG.WAVE.SPEED_INCREASE_PER_WAVE;
-        
-        let multiplier = 1;
-        if (this.type === 'boofly') multiplier = 1.3; // Flying enemies faster
-        if (this.type === 'boss') multiplier = 0.7; // Boss slower but tankier
-        
-        return (baseSpeed + ((wave - 1) * increase)) * multiplier;
+        // Speed musuh konstan sesuai tipe, tidak bertambah per wave
+        if (this.type === 'crawlid') {
+            return CONFIG.ENEMY.BASE_SPEED;
+        } else if (this.type === 'boofly') {
+            return 1; // Atur sesuai keinginan, misal lebih cepat dari crawlid
+        } else if (this.type === 'boss') {
+            return 0.3; // Atur sesuai keinginan, misal lebih lambat
+        } else {
+            return CONFIG.ENEMY.BASE_SPEED;
+        }
     }
     
     calculateDamage(wave) {
@@ -411,10 +413,6 @@ class Enemy {
         ctx.restore();
 
         // Draw HP bar (only if alive)
-        if (!this.isDead) {
-            this.drawHealthBar(ctx);
-            this.drawDebugInfo(ctx);
-        }
     }
     
     drawSprite(ctx) {
