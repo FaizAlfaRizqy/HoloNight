@@ -43,3 +43,28 @@ Frontend:
 **2/12/2025**
 Frontend:
 - Create leaderboard page
+
+**9/12/2025**
+Backend:
+- Membuat dasar untuk game
+
+**11/12/2025**
+Backend:
+- Melanjutkan progress pembuatan game
+
+**13/12/2025**
+Backend:
+- Membuat platform dan config kontrol
+
+**14/12/2025**
+Backend:
+- Memperbaiki logika musuh
+- Config musuh
+- Menambah sound game
+
+**15/12/2025**
+Backend:
+- Configurasi game untuk layar 60 Hz atau 60 Fps
+- Remove visible status musuh
+- Penambahan dash di game
+- Recheck dan final touch
