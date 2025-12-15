@@ -81,7 +81,7 @@ $user = getCurrentUser();
                 <div class="rules">
                     <div class="rule-item">
                         <span class="number">1.</span>
-                        <span class="rule-text">Get as many point as you can in 150 seconds</span>
+                        <span class="rule-text">Get as many point as you can</span>
                     </div>
                     <div class="rule-item">
                         <span class="number">2.</span>
