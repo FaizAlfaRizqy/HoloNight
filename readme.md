@@ -75,34 +75,13 @@ A fan-made web-based Hollow Knight game developed as a Web Programming project. 
    cd holonight
    ```
 
-2. **Database Configuration**
-   ```sql
-   -- Create database
-   CREATE DATABASE hollow_knight_db;
-   
-   -- Import database schema (create your tables)
-   USE hollow_knight_db;
-   ```
-
-3. **Configure Database Connection**
-   
-   Edit `config/koneksi.php` with your database credentials:
-   ```php
-   <?php
-   $host = 'localhost';
-   $username = 'your_username';
-   $password = 'your_password';
-   $database = 'hollow_knight_db';
-   ?>
-   ```
-
-4. **Set Up Web Server**
+2. **Set Up Web Server**
    
    - Place project files in your web server directory (e.g., `htdocs`, `www`)
    - Ensure PHP is enabled on your server
    - Configure virtual host if needed
 
-5. **Access the Application**
+3. **Access the Application**
    
    Open your browser and navigate to:
    ```
@@ -197,9 +176,10 @@ HoloNight/
 - Screen shake effects
 - Smooth transitions and effects
 
-## 📸 Screenshots
 
-> Add your game screenshots here to showcase the project
+## Demo Gameplay
+[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)]([https://www.youtube.com/watch?v=ge8Ze9Tht-Q]
+
 
 ## 👥 Authors
 
