@@ -168,7 +168,7 @@ $leaderboard_result = mysqli_query($koneksi, $leaderboard_query);
                     <div class="name-col">
                         <?php echo htmlspecialchars($row['username']); ?>
                         <?php if ($is_current_user): ?>
-                            <span class="you-badge">YOU</span>
+                            <span class="you-badge">(YOU)</span>
                         <?php endif; ?>
                     </div>
                     <div class="score-col"><?php echo number_format($row['score']); ?></div>
@@ -183,7 +183,7 @@ $leaderboard_result = mysqli_query($koneksi, $leaderboard_query);
                     <p style="margin-top: 20px;">
                         <a href="game/game.php">Play Game Now →</a>
                     </p>
-                </div>
+                </div>s
                 <?php endif; ?>
             </div>
         </div>
