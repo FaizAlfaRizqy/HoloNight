@@ -48,19 +48,32 @@ Frontend:
 Backend:
 - Membuat dasar untuk game
 
+**6/12/2025**
+UI:
+- finishing UI (add more detail) 
+- add figma components
+
 **11/12/2025**
 Backend:
 - Melanjutkan progress pembuatan game
 
+**10/12/2025**
+Frontend:
+- Create index page
+
 **13/12/2025**
 Backend:
 - Membuat platform dan config kontrol
+Frontend:
+- Finishing index page
 
 **14/12/2025**
 Backend:
 - Memperbaiki logika musuh
 - Config musuh
 - Menambah sound game
+Frontend:
+- Create How To Play Page
 
 **15/12/2025**
 Backend:
@@ -68,3 +81,8 @@ Backend:
 - Remove visible status musuh
 - Penambahan dash di game
 - Recheck dan final touch
+Frontend:
+- Finishing web (add animation) 
+- add responsivity on mobile
+- add OS detection for mobile
+
