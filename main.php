@@ -19,13 +19,17 @@ $user = getCurrentUser();
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-container">
+        <button class="hamburger-menu" id="hamburgerMenu">
+            <img src="src/img/hamburger.jpg" alt="Menu">
+        </button>
+        <div class="nav-container" id="navContainer">
             <a href="main.php" class="nav-link active">HOME</a>
             <a href="leaderboard.php" class="nav-link">LEADERBOARD</a>
             <a href="howtoplay.php" class="nav-link">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>
         </div>
     </nav>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
     <!-- Auth Buttons -->
     <div class="auth-buttons">
@@ -56,10 +60,6 @@ $user = getCurrentUser();
 
         <!-- Carousel Story Cards -->
         <div class="story-card carousel-card scroll-animate-right">
-            <button class="carousel-arrow left-arrow">
-                <img src="src/img/right.png" alt="Next">
-            </button>
-            
             <div class="carousel-slides">
                 <!-- Slide 1: Before The Wyrm -->
                 <div class="carousel-slide active">
@@ -97,7 +97,10 @@ $user = getCurrentUser();
                     </div>
                 </div>
             </div>
-
+            
+            <button class="carousel-arrow left-arrow">
+                <img src="src/img/right.png" alt="Next">
+            </button>
             <button class="carousel-arrow right-arrow">
                 <img src="src/img/left.png" alt="Previous">
             </button>
@@ -275,6 +278,36 @@ $user = getCurrentUser();
     <button id="musicToggle" class="music-toggle">🔊</button>
 
     <script>
+        // Hamburger Menu Toggle
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navContainer = document.getElementById('navContainer');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+        hamburgerMenu.addEventListener('click', () => {
+            hamburgerMenu.classList.toggle('active');
+            navContainer.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.style.overflow = navContainer.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileMenuOverlay.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            navContainer.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when nav link is clicked
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navContainer.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Music Controls
         const music = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         let isPlaying = false;
@@ -329,7 +362,7 @@ $user = getCurrentUser();
             {
                 preview: 'src/vid/HorNeitPrev.mp4',
                 main: 'src/img/ZaHornet.gif',
-                title: 'myHornet',
+                title: 'Hornet',
                 desc1: 'Hornet is the mysterious princess-protector of Hallownest\'s ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.',
                 desc2: 'Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.'
             },

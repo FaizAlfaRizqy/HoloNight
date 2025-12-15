@@ -19,13 +19,17 @@ $user = getCurrentUser();
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="nav-container">
+        <button class="hamburger-menu" id="hamburgerMenu">
+            <img src="src/img/hamburger.jpg" alt="Menu">
+        </button>
+        <div class="nav-container" id="navContainer">
             <a href="main.php" class="nav-link">HOME</a>
             <a href="leaderboard.php" class="nav-link">LEADERBOARD</a>
             <a href="howtoplay.php" class="nav-link active">HOW TO PLAY</a>
             <a href="game/game.php" class="nav-link">PLAY GAME</a>
         </div>
     </nav>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
     <!-- Auth Buttons -->
     <div class="auth-buttons">
@@ -105,6 +109,36 @@ $user = getCurrentUser();
     <button id="musicToggle" class="music-toggle">🔊</button>
 
     <script>
+        // Hamburger Menu Toggle
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const navContainer = document.getElementById('navContainer');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+        hamburgerMenu.addEventListener('click', () => {
+            hamburgerMenu.classList.toggle('active');
+            navContainer.classList.toggle('active');
+            mobileMenuOverlay.classList.toggle('active');
+            document.body.style.overflow = navContainer.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileMenuOverlay.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('active');
+            navContainer.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when nav link is clicked
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navContainer.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Music Controls
         const music = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         let isPlaying = false;
