@@ -53,7 +53,7 @@ $user = getCurrentUser();
         
         <!-- Controls Info -->
         <div class="controls-bar">
-            <span class="controls-text">← → Arrow Keys:  Move | X: Jump | F: Attack</span>
+            <span class="controls-text">← → Arrow Keys:  Move | X: Jump | F: Attack | C: Dash</span>
         </div>
     </div>
     

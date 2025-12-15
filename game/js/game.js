@@ -53,6 +53,7 @@ const Sounds = {
     bgm: new Audio('../src/game/audio/bgm.mp3'),
     hero_hit: new Audio('../src/game/audio/hero_hit.wav'),
     hero_jump: new Audio('../src/game/audio/hero_jump.mp3'),
+    hero_dash: new Audio('../src/game/audio/hero_dash.mav'),
     sword: new Audio('../src/game/audio/hit.wav'),
     hit: new Audio('../src/game/audio/hit.wav'),
     crawlid_death: new Audio('../src/game/audio/crawlid_death.wav')
@@ -89,7 +90,8 @@ const Assets = {
     hero: {
         idle: [],
         attack: [],
-        splash: []
+        splash: [],
+        dash: []
     },
     
     // Enemy Sprites
@@ -201,6 +203,13 @@ async function loadAssets() {
     }
     console.log('📦 Total splash frames loaded:', Assets.hero.splash.length);
     
+    // Hero Dash Animation (2 frames)
+    Assets.hero.dash = [];
+    for (let i = 1; i <= 2; i++) {
+        const img = await loadImage(`../src/game/hero/dash/dash_0${i}.png`);
+        Assets.hero.dash.push(img);
+    }
+
     // Crawlid Walk Animation (4 frames)
     for (let i = 1; i <= 4; i++) {
         const img = await loadImage(`../src/game/crawlid/walk/crawlid_0${i}.png`);

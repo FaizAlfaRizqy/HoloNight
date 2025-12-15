@@ -50,6 +50,12 @@ class Player {
         this.splashFrameCounter = 0;
         this.splashAnimationSpeed = 4; // Faster splash animation
 
+        // Dash
+        this.isDashing = false;
+        this.dashStartTime = 0;
+        this.dashCooldown = 0;
+        this.dashDir = 1;
+
         // Input
         this.keys = {};
         this.setupControls();
@@ -62,6 +68,11 @@ class Player {
 
             if (e.key === 'ArrowLeft') this.isFacingRight = false;
             if (e.key === 'ArrowRight') this.isFacingRight = true;
+            // Dash: C atau Shift
+            if ((e.key === 'c' || e.key === 'C' || e.key === 'Shift') && !this.isDashing) {
+                this.startDash();
+                e.preventDefault();
+            }
             // Prevent default for X (jump) and Z (attack) if needed
             if (e.key.toLowerCase() === 'x' || e.key.toLowerCase() === 'z') e.preventDefault();
         });
@@ -71,20 +82,57 @@ class Player {
             this.keys[e.code] = false;
         });
     }
-    
-    update(deltaTime) {
-        this.handleMovement();
-        this.handleJump();
-        this.handleAttack();
-        this.applyGravity();
 
-        // Tentukan state animasi
-        if (this.isAttacking) {
-            this.state = 'attack';
-        } else if (this.velocityX !== 0) {
-            this.state = 'walk';
+    startDash() {
+        if (this.isDashing || this.dashCooldown > 0 || this.isAttacking) return;
+        this.isDashing = true;
+        this.dashStartTime = Date.now();
+        this.dashDir = this.isFacingRight ? 1 : -1;
+        this.dashCooldown = CONFIG.PLAYER.DASH_COOLDOWN;
+        this.state = 'dash';
+        this.currentFrame = 0;
+        this.isInvincible = true;
+        if (typeof playSound === 'function' && window.Sounds && window.Sounds.hero_dash) playSound(window.Sounds.hero_dash);
+    }
+
+    update(deltaTime) {
+        // Dash logic
+        if (this.dashCooldown > 0) {
+            this.dashCooldown -= deltaTime * 16.67; // deltaTime in frames, cooldown in ms
+            if (this.dashCooldown < 0) this.dashCooldown = 0;
+        }
+
+        if (this.isDashing) {
+            this.state = 'dash';
+            const dashElapsed = Date.now() - this.dashStartTime;
+            const dashDuration = CONFIG.PLAYER.DASH_DURATION;
+            const dashDistance = CONFIG.PLAYER.DASH_DISTANCE;
+            // Move player by dash distance over dash duration
+            const dashSpeed = dashDistance / (dashDuration / 16.67); // px per frame
+            this.velocityX = this.dashDir * dashSpeed;
+            this.velocityY = 0;
+            // Invincible during dash
+            this.isInvincible = true;
+            if (dashElapsed >= dashDuration) {
+                this.isDashing = false;
+                this.velocityX = 0;
+                this.isInvincible = false;
+                this.state = 'idle';
+            }
         } else {
-            this.state = 'idle';
+            this.handleMovement();
+            this.handleJump();
+            this.handleAttack();
+            this.applyGravity();
+
+            // Tentukan state animasi
+            if (this.isAttacking) {
+                this.state = 'attack';
+            } else if (this.velocityX !== 0) {
+                this.state = 'walk';
+            } else {
+                this.state = 'idle';
+            }
         }
 
         this.updateAnimation();
@@ -96,7 +144,7 @@ class Player {
         this.checkPlatformCollision();
         this.constrainToCanvas();
 
-        if (this.isInvincible) {
+        if (this.isInvincible && !this.isDashing) {
             this.invincibleTimer -= deltaTime;
             if (this.invincibleTimer <= 0) {
                 this.isInvincible = false;
@@ -225,6 +273,7 @@ class Player {
         let maxFrame = 5;
         if (this.state === 'attack') maxFrame = 2;
         if (this.state === 'walk') maxFrame = 5;
+        if (this.state === 'dash') maxFrame = 2;
 
         if (this.frameCounter >= this.animationSpeed) {
             this.frameCounter = 0;
@@ -278,8 +327,8 @@ class Player {
     }
     
     draw(ctx, assets) {
-        // Blinking effect saat invincible
-        if (this.isInvincible) {
+        // Blinking effect saat invincible (kecuali dash, dash selalu tampil)
+        if (this.isInvincible && !this.isDashing) {
             const shouldDraw = Math.floor(this.invincibleTimer / 5) % 2 === 0;
             if (!shouldDraw) return;
         }
@@ -298,12 +347,12 @@ class Player {
         let spriteArray = assets.hero.idle;
         if (this.state === 'attack') spriteArray = assets.hero.attack;
         else if (this.state === 'walk') spriteArray = assets.hero.walk;
+        else if (this.state === 'dash') spriteArray = assets.hero.dash;
         const currentSprite = spriteArray[this.currentFrame];
 
         if (currentSprite && currentSprite.complete) {
             ctx.drawImage(currentSprite, 0, 0, this.width, this.height);
         } else {
-            // Fallback rectangle
             ctx.fillStyle = CONFIG.PLAYER.COLOR;
             ctx.fillRect(0, 0, this.width, this.height);
         }

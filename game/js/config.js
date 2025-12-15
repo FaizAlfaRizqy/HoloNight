@@ -23,7 +23,10 @@ const CONFIG = {
         ATTACK_COOLDOWN: 300,
         ATTACK_DURATION: 200,
         COLOR: '#4a9eff',
-        INVINCIBLE_TIME: 1000
+        INVINCIBLE_TIME: 1000,
+        DASH_DISTANCE: 200, // Jarak dash (px)
+        DASH_COOLDOWN: 700, // ms
+        DASH_DURATION: 150  // ms (waktu invincible & animasi dash)
     },
     
     // Enemy Settings
@@ -115,7 +118,8 @@ const CONFIG = {
     ASSETS: {
         HERO: {
             IDLE: '../src/game/hero/idle/',
-            ATTACK: '../src/game/hero/attack/'
+            ATTACK: '../src/game/hero/attack/',
+            DASH: '../src/game/hero/dash/'
         },
         ENEMIES:  {
             CRAWLID:  {
