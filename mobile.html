@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Warning - Hollow Knight</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .warning-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px 20px;
+        }
+
+        .warning-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .warning-message {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .os-name {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .warning-question {
+            font-size: 18px;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .btn-yes {
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+
+        .btn-yes:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .btn-no {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .btn-no:hover {
+            background-color: #ff4444;
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .warning-title {
+                font-size: 20px;
+            }
+
+            .warning-message {
+                font-size: 14px;
+            }
+
+            .warning-question {
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="warning-container">
+        <h1 class="warning-title">Hallownest Network</h1>
+        <p class="warning-message">
+            Hallownest network is not fully supported yet in your <span class="os-name" id="osName">mobile device</span>.
+        </p>
+        <p class="warning-question">Continue?</p>
+        <div class="button-group">
+            <button class="btn btn-yes" id="btnYes">Yes</button>
+            <button class="btn btn-no" id="btnNo">No</button>
+        </div>
+    </div>
+
+    <script>
+        // Get OS name from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const osName = urlParams.get('os') || 'mobile device';
+        const returnUrl = urlParams.get('return') || 'index.html';
+        
+        document.getElementById('osName').textContent = osName;
+
+        // Yes button - continue to the page
+        document.getElementById('btnYes').addEventListener('click', () => {
+            // Set a flag in sessionStorage to bypass detection
+            sessionStorage.setItem('mobile_warning_accepted', 'true');
+            window.location.href = returnUrl;
+        });
+
+        // No button - go back to index
+        document.getElementById('btnNo').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

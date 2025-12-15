@@ -17,6 +17,33 @@ $user = getCurrentUser();
     <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
+    <script>
+        // Mobile OS Detection
+        (function() {
+            // Check if user already accepted the warning
+            if (sessionStorage.getItem('mobile_warning_accepted') === 'true') {
+                return;
+            }
+            
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            let mobileOS = null;
+            
+            // Detect Android
+            if (/android/i.test(userAgent)) {
+                mobileOS = 'Android';
+            }
+            // Detect iOS
+            else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                mobileOS = 'iOS';
+            }
+            
+            // Redirect to mobile warning page if mobile OS detected
+            if (mobileOS) {
+                const currentPage = window.location.pathname.split('/').pop() || 'main.php';
+                window.location.href = 'mobile.html?os=' + mobileOS + '&return=' + encodeURIComponent(currentPage);
+            }
+        })();
+    </script>
     <!-- Navbar -->
     <nav class="navbar">
         <button class="hamburger-menu" id="hamburgerMenu">
@@ -99,10 +126,10 @@ $user = getCurrentUser();
             </div>
             
             <button class="carousel-arrow left-arrow">
-                <img src="src/img/right.png" alt="Next">
+                <img src="src/img/left.png" alt="Previous">
             </button>
             <button class="carousel-arrow right-arrow">
-                <img src="src/img/left.png" alt="Previous">
+                <img src="src/img/right.png" alt="Next">
             </button>
         </div>
     </section>
@@ -144,9 +171,6 @@ $user = getCurrentUser();
                 <video src="src/vid/HorNeitPrev.mp4" autoplay loop muted playsinline class="character-preview" id="charPreview"></video>
                 <img src="src/img/textboox.png" alt="Text Box" class="textbox-bg">
                 <div class="character-text" id="charText">
-                    <h2 id="charTitle">myHornet</h2>
-                    <p id="charDesc1">Hornet is the mysterious princess-protector of Hallownest's ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.</p>
-                    <p id="charDesc2">Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.</p>
                 </div>
             </div>
             
@@ -186,72 +210,88 @@ $user = getCurrentUser();
                 <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
                 <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
                 <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
                 <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
                 <img src="src/img/diagonal2.png" alt="Character 2" class="diagonal-image">
-                <img src="src/img/diagonal3.png" alt="Character " class="diagonal-image">
+                <img src="src/img/diagonal3.png" alt="Character 3" class="diagonal-image">
+                <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
             </div>
             <!-- Slider 2 -->
             <div class="diagonal-column" data-direction="up">
                 <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
                 <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
                 <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
                 <img src="src/img/diagonal4.png" alt="Character 4" class="diagonal-image">
                 <img src="src/img/diagonal5.png" alt="Character 5" class="diagonal-image">
                 <img src="src/img/diagonal6.png" alt="Character 6" class="diagonal-image">
+                <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
             </div>
             <!-- Slider 3 -->
             <div class="diagonal-column" data-direction="down">
                 <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
                 <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
                 <img src="src/img/diagonal9.png" alt="Character 9" class="diagonal-image">
+                <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
                 <img src="src/img/diagonal7.png" alt="Character 7" class="diagonal-image">
                 <img src="src/img/diagonal8.png" alt="Character 8" class="diagonal-image">
                 <img src="src/img/diagonal9.png" alt="Character 9" class="diagonal-image">
+                <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
             </div>
             <!-- Slider 4 -->
             <div class="diagonal-column" data-direction="up">
                 <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
                 <img src="src/img/diagonal11.png" alt="Character 11" class="diagonal-image">
                 <img src="src/img/diagonal12.png" alt="Character 12" class="diagonal-image">
+                <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
                 <img src="src/img/diagonal10.png" alt="Character 10" class="diagonal-image">
                 <img src="src/img/diagonal11.png" alt="Character 11" class="diagonal-image">
                 <img src="src/img/diagonal12.png" alt="Character 12" class="diagonal-image">
+                <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
             </div>
             <!-- Slider 5 -->
             <div class="diagonal-column" data-direction="down">
                 <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
                 <img src="src/img/diagonal14.png" alt="Character 14" class="diagonal-image">
                 <img src="src/img/diagonal15.png" alt="Character 15" class="diagonal-image">
+                <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
                 <img src="src/img/diagonal13.png" alt="Character 13" class="diagonal-image">
                 <img src="src/img/diagonal14.png" alt="Character 14" class="diagonal-image">
                 <img src="src/img/diagonal15.png" alt="Character 15" class="diagonal-image">
+                <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
             </div>
             <!-- Slider 6 -->
             <div class="diagonal-column" data-direction="up">
                 <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
                 <img src="src/img/diagonal17.png" alt="Character 17" class="diagonal-image">
                 <img src="src/img/diagonal18.png" alt="Character 18" class="diagonal-image">
+                <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
                 <img src="src/img/diagonal16.png" alt="Character 16" class="diagonal-image">
                 <img src="src/img/diagonal17.png" alt="Character 17" class="diagonal-image">
                 <img src="src/img/diagonal18.png" alt="Character 18" class="diagonal-image">
+                <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
             </div>
             <!-- Slider 7 -->
             <div class="diagonal-column" data-direction="down">
                 <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
                 <img src="src/img/diagonal20.png" alt="Character 20" class="diagonal-image">
                 <img src="src/img/diagonal21.png" alt="Character 21" class="diagonal-image">
+                <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
                 <img src="src/img/diagonal19.png" alt="Character 19" class="diagonal-image">
                 <img src="src/img/diagonal20.png" alt="Character 20" class="diagonal-image">
                 <img src="src/img/diagonal21.png" alt="Character 21" class="diagonal-image">
+                <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
             </div>
             <!-- Slider 8 -->
             <div class="diagonal-column" data-direction="up">
                 <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
                 <img src="src/img/diagonal23.png" alt="Character 23" class="diagonal-image">
                 <img src="src/img/diagonal24.png" alt="Character 24" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
                 <img src="src/img/diagonal22.png" alt="Character 22" class="diagonal-image">
                 <img src="src/img/diagonal23.png" alt="Character 23" class="diagonal-image">
                 <img src="src/img/diagonal24.png" alt="Character 24" class="diagonal-image">
+                <img src="src/img/diagonal1.png" alt="Character 1" class="diagonal-image">
             </div>
         </div>
     </section>
@@ -261,12 +301,10 @@ $user = getCurrentUser();
         <div class="footer-content">
             <div class="footer-left">
                 <h3>Hollow Knight</h3>
-                <p>&copy; 2024 Team Cherry. All rights reserved.</p>
-            </div>
-            <div class="footer-right">
-                <a href="main.php" class="footer-link">Home</a>
-                <a href="leaderboard.php" class="footer-link">Leaderboard</a>
-                <a href="game/game.php" class="footer-link">Play Game</a>
+                <p>A fanmade web for web development project</p>
+                <p>Created by:</p>
+                <p>- M. Umar Faiz Alfa Rizqy</p>
+                <p>- Nathanael Jovan Wahyudi</p> 
             </div>
         </div>
     </footer>
@@ -297,19 +335,13 @@ $user = getCurrentUser();
             document.body.style.overflow = '';
         });
 
-        // Close menu when nav link is clicked (ensure menu closes before navigation)
+        // Close menu when nav link is clicked
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (window.innerWidth <= 900) {
-                    hamburgerMenu.classList.remove('active');
-                    navContainer.classList.remove('active');
-                    mobileMenuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                    setTimeout(() => {
-                        window.location = link.getAttribute('href');
-                    }, 120);
-                    e.preventDefault();
-                }
+            link.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navContainer.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
 
@@ -354,12 +386,12 @@ $user = getCurrentUser();
         }
 
         leftArrow.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % carouselSlides.length;
+            currentIndex = (currentIndex - 1 + carouselSlides.length) % carouselSlides.length;
             showSlide(currentIndex);
         });
 
         rightArrow.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + carouselSlides.length) % carouselSlides.length;
+            currentIndex = (currentIndex + 1) % carouselSlides.length;
             showSlide(currentIndex);
         });
 
@@ -367,17 +399,11 @@ $user = getCurrentUser();
         const characterData = [
             {
                 preview: 'src/vid/HorNeitPrev.mp4',
-                main: 'src/img/ZaHornet.gif',
-                title: 'Hornet',
-                desc1: 'Hornet is the mysterious princess-protector of Hallownest\'s ruins, the deuteragonist of Hollow Knight and the main protagonist of Hollow Knight: Silksong. She wields a needle and thread with deadly prowess.',
-                desc2: 'Hornet is the daughter of the Pale King and Herrah the Beast, the queen of Deepnest. Her birth was the result of a bargain for her mother to become a Dreamer, and as such she spent only a short time with Herrah.'
+                main: 'src/img/ZaHornet.gif'
             },
             {
                 preview: 'src/vid/NaitPrev.mp4',
-                main: 'src/img/NightSit.gif',
-                title: 'The Knight',
-                desc1: 'The Knight is a discarded Vessel. They are the child of the Pale King and the White Lady, born in the Abyss with Void inside their shell. Hornet is the Knight\'s sister through their shared father.',
-                desc2: 'The Knight was one of many vessels created to contain the Radiance and seal the Infection. After being discarded, they eventually returned to Hallownest to face their destiny and discover the truth of their origin.'
+                main: 'src/img/NightSit.gif'
             }
         ];
 
@@ -390,9 +416,11 @@ $user = getCurrentUser();
             // Update images with fade effect
             const charPreview = document.getElementById('charPreview');
             const charMain = document.getElementById('charMain');
+            const textboxBg = document.querySelector('.textbox-bg');
             
             charPreview.style.opacity = '0';
             charMain.style.opacity = '0';
+            textboxBg.style.opacity = '0';
             
             setTimeout(() => {
                 charPreview.src = char.preview;
@@ -400,14 +428,17 @@ $user = getCurrentUser();
                 charPreview.alt = char.title + ' Preview';
                 charMain.alt = char.title;
                 
+                // Change textbox based on character
+                if (index === 1) {
+                    textboxBg.src = 'src/img/textboox-2.png';
+                } else {
+                    textboxBg.src = 'src/img/textboox.png';
+                }
+                
                 charPreview.style.opacity = '1';
                 charMain.style.opacity = '1';
+                textboxBg.style.opacity = '1';
             }, 300);
-            
-            // Update text
-            document.getElementById('charTitle').textContent = char.title;
-            document.getElementById('charDesc1').textContent = char.desc1;
-            document.getElementById('charDesc2').textContent = char.desc2;
             
             // Update active logo
             document.querySelectorAll('.attr-logo').forEach((logo, i) => {

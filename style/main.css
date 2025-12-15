@@ -587,11 +587,12 @@ body {
     gap: 0;
     width: 100%;
     position: relative;
+    margin-top: 50px;
 }
 
 .character-main {
     width: auto;
-    max-width: 600px;
+    max-width: 450px;
     height: auto;
     object-fit: contain;
     z-index: 4;
@@ -620,8 +621,8 @@ body {
     border: none;
     cursor: pointer;
     padding: 0;
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -640,8 +641,8 @@ body {
 }
 
 .attr-logo {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1274,8 +1275,8 @@ body {
     }
 
     .character-main {
-        width: clamp(120px, 45vw, 200px);
-        max-width: 200px;
+        width: clamp(100px, 40vw, 150px);
+        max-width: 150px;
         height: auto;
     }
     

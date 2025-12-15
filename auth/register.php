@@ -64,6 +64,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../style/login.css">
 </head>
 <body>
+    <script>
+        // Mobile OS Detection
+        (function() {
+            // Check if user already accepted the warning
+            if (sessionStorage.getItem('mobile_warning_accepted') === 'true') {
+                return;
+            }
+            
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            let mobileOS = null;
+            
+            // Detect Android
+            if (/android/i.test(userAgent)) {
+                mobileOS = 'Android';
+            }
+            // Detect iOS
+            else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                mobileOS = 'iOS';
+            }
+            
+            // Redirect to mobile warning page if mobile OS detected
+            if (mobileOS) {
+                window.location.href = '../mobile.html?os=' + mobileOS + '&return=' + encodeURIComponent('auth/register.php');
+            }
+        })();
+    </script>
     <div class="register-container">
         <video class="video-background" autoplay loop muted playsinline>
             <source src="../src/background/login.mp4" type="video/mp4">

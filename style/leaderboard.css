@@ -24,8 +24,8 @@ html, body {
 .navbar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 150px;
+    width: calc(100% - 150px);
     background: transparent;
     z-index: 1000;
     padding: 30px 0;
@@ -35,9 +35,9 @@ html, body {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: flex-start;
-    gap: 100px;
-    padding: 0 50px;
+    justify-content: left;
+    gap: 50px;
+    padding: 0 20px;
 }
 
 .nav-link {
@@ -48,7 +48,6 @@ html, body {
     transition: all 0.3s ease;
     padding: 10px 0;
     text-transform: uppercase;
-    font-family: 'Poppins', sans-serif;
 }
 
 .nav-link:hover {
@@ -111,65 +110,31 @@ html, body {
 }
 
 /* Auth Buttons */
-
-/* Auth Buttons (match main.css style) */
 .auth-buttons {
     position: fixed;
     top: 30px;
     right: 50px;
     display: flex;
     gap: 20px;
-    align-items: center;
     z-index: 1000;
 }
 
-
 .auth-btn {
-    padding: 6px 14px;
+    padding: 12px 30px;
     background: rgba(0, 0, 0, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.5);
     color: white;
     text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 1.2px;
+    font-size: 16px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
-    font-family: 'Poppins', sans-serif;
 }
 
 .auth-btn:hover {
-    background: #ff4444;
-    border-color: #ff4444;
-}
-
-/* User info badge (for username) */
-.user-info {
-    padding: 6px 14px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    color: white;
-    font-size: 13px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    backdrop-filter: blur(5px);
-    font-family: 'Poppins', sans-serif;
-}
-
-@media (max-width: 768px) {
-    .auth-buttons {
-        top: 14px;
-        right: 10px;
-        gap: 6px;
-    }
-    .auth-btn {
-        padding: 4px 10px;
-        font-size: 10px;
-    }
-    .user-info {
-        padding: 4px 10px;
-        font-size: 10px;
-    }
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
 }
 
 /* Banner */
@@ -405,6 +370,7 @@ html, body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* Hamburger menu */
     .hamburger-menu {
         display: block;
         top: 25px;
@@ -412,9 +378,11 @@ html, body {
         width: 35px;
         height: 35px;
     }
+    
     .mobile-menu-overlay {
         display: block;
     }
+    
     .nav-container {
         position: fixed;
         top: 0;
@@ -432,70 +400,88 @@ html, body {
         gap: 30px;
         padding: 0;
     }
+    
     .nav-container.active {
         left: 0;
     }
+
     .nav-link {
         font-size: 14px;
     }
+
     .auth-buttons {
         top: 20px;
         right: 20px;
         gap: 10px;
     }
+
     .auth-btn {
         padding: 8px 20px;
         font-size: 12px;
     }
+
     .banner {
         height: 200px;
     }
+
     .podium-container {
         top: 100px;
         gap: 30px;
     }
+
     .podium-first .podium-badge {
         width: 140px;
         height: 140px;
     }
+
     .podium-second .podium-badge,
     .podium-third .podium-badge {
         width: 110px;
         height: 110px;
     }
+
     .podium-name {
         font-size: 11px;
     }
+
     .podium-first .podium-name {
         font-size: 13px;
     }
+
     .podium-score {
         font-size: 13px;
     }
+
     .podium-first .podium-score {
         font-size: 16px;
     }
+
     .leaderboard-container {
         top: 350px;
         height: calc(100vh - 380px);
         width: 95%;
     }
+
     .table-header,
     .table-row {
         grid-template-columns: 100px 1fr 120px;
         padding: 15px 25px;
         font-size: 14px;
     }
+
     .table-row {
         margin-bottom: 10px;
         border-radius: 8px;
     }
+
     .rank-col {
         font-size: 16px;
     }
+
     .name-col {
         font-size: 14px;
     }
+
     .score-col {
         font-size: 16px;
     }

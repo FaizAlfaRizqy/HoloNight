@@ -68,6 +68,10 @@ $user = getCurrentUser();
                         <span class="key">X</span>
                         <span class="description">= Jump</span>
                     </div>
+                    <div class="control-item">
+                        <span class="key">C</span>
+                        <span class="description">= Dash</span>
+                    </div>
                 </div>
             </div>
 
@@ -124,19 +128,13 @@ $user = getCurrentUser();
             document.body.style.overflow = '';
         });
 
-        // Close menu when nav link is clicked (ensure menu closes before navigation)
+        // Close menu when nav link is clicked
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                if (window.innerWidth <= 900) {
-                    hamburgerMenu.classList.remove('active');
-                    navContainer.classList.remove('active');
-                    mobileMenuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                    setTimeout(() => {
-                        window.location = link.getAttribute('href');
-                    }, 120);
-                    e.preventDefault();
-                }
+            link.addEventListener('click', () => {
+                hamburgerMenu.classList.remove('active');
+                navContainer.classList.remove('active');
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
 
