@@ -99,7 +99,7 @@ $leaderboard_result = mysqli_query($koneksi, $leaderboard_query);
     <!-- Auth Buttons -->
     <div class="auth-buttons">
         <?php if ($current_user_id): ?>
-            <span class="auth-btn" style="opacity: 0.8; cursor: default;">
+            <span class="user-info" style="opacity: 0.8; cursor: default;">
                 <?php echo htmlspecialchars($current_username); ?>
             </span>
             <a href="auth/logout.php" class="auth-btn">LOGOUT</a>
@@ -214,13 +214,21 @@ $leaderboard_result = mysqli_query($koneksi, $leaderboard_query);
             document.body.style.overflow = '';
         });
 
-        // Close menu when nav link is clicked
+        // Close menu when nav link is clicked (ensure menu closes before navigation)
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburgerMenu.classList.remove('active');
-                navContainer.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+            link.addEventListener('click', (e) => {
+                // Only run on mobile (nav is overlayed)
+                if (window.innerWidth <= 900) {
+                    hamburgerMenu.classList.remove('active');
+                    navContainer.classList.remove('active');
+                    mobileMenuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    // Delay navigation to allow menu to close smoothly
+                    setTimeout(() => {
+                        window.location = link.getAttribute('href');
+                    }, 120);
+                    e.preventDefault();
+                }
             });
         });
     </script>
