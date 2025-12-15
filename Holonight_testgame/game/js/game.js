@@ -754,24 +754,17 @@ function updateUI() {
 // =============================================================================
 // GAME OVER
 // =============================================================================
+let scoreSaved = false;
 function gameOver() {
     console.log("💀 GAME OVER!");
-    
     gameState = CONFIG.STATES.GAME_OVER;
-    
-    // Calculate final score with bonus
     const remainingHealth = player.maxHits - player.hits;
     const healthBonus = remainingHealth * 100;
     const finalScore = score + healthBonus;
-    
-    // Update final stats with new IDs
     document.getElementById('finalWaveDisplay').textContent = waveManager.currentWave;
     document.getElementById('finalScoreDisplay').textContent = finalScore.toLocaleString();
-    
-    // Show game over screen
     document.getElementById('gameOverScreen').style.display = 'flex';
-    
-    // Auto save score
+    scoreSaved = false;
     autoSaveScore();
 }
 
@@ -801,14 +794,12 @@ function restartGame() {
 
 // Auto Save Score (dipanggil otomatis saat game over)
 function autoSaveScore() {
-    // Calculate bonus based on remaining health (hits not taken)
+    if (scoreSaved) return;
+    scoreSaved = true;
     const remainingHealth = player.maxHits - player.hits;
-    const healthBonus = remainingHealth * 100; // 100 points per remaining health
+    const healthBonus = remainingHealth * 100;
     const finalScore = score + healthBonus;
-    
     console.log("💾 Auto saving score:", finalScore, "Wave:", waveManager.currentWave);
-    
-    // Send to server
     fetch('save_score.php', {
         method: 'POST',
         headers: {
@@ -820,7 +811,6 @@ function autoSaveScore() {
     .then(data => {
         if (data.success) {
             console.log("✅ Score saved! Rank: #" + data.rank);
-            // Update rank display if element exists
             const rankElement = document.getElementById('playerRank');
             if (rankElement) {
                 rankElement.textContent = '#' + data.rank;
@@ -836,21 +826,17 @@ function autoSaveScore() {
 
 // Save Score (INTEGRATED dengan database) - untuk manual save jika diperlukan
 function saveScore() {
-    // Calculate bonus based on remaining health (hits not taken)
+    if (scoreSaved) return;
+    scoreSaved = true;
     const remainingHealth = player.maxHits - player.hits;
-    const healthBonus = remainingHealth * 100; // 100 points per remaining health
+    const healthBonus = remainingHealth * 100;
     const finalScore = score + healthBonus;
-    
     console.log("💾 Saving score:", finalScore, "Wave:", waveManager.currentWave);
-    
-    // Show loading state
     const saveBtn = document.querySelector('[onclick="saveScore()"]');
     if (saveBtn) {
         saveBtn.textContent = 'Saving...';
         saveBtn.disabled = true;
     }
-    
-    // Send to server
     fetch('save_score.php', {
         method: 'POST',
         headers: {

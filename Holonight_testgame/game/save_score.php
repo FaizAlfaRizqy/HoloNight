@@ -1,14 +1,13 @@
 <?php
 
-// Aktifkan output buffering dan error reporting untuk debugging
-ob_start();
-error_reporting(E_ALL); // Ganti ke 0 untuk production
-ini_set('display_errors', 1);
+
+// Nonaktifkan error output agar response tetap valid JSON
+error_reporting(0);
+ini_set('display_errors', 0);
 
 session_start();
 require_once '../config/koneksi.php';
-// Gunakan path absolut agar tidak error
-file_put_contents(__DIR__ . '/debug_log.txt', var_export($_SESSION, true));
+
 
 // Set header untuk JSON response
 header('Content-Type: application/json');
@@ -19,7 +18,6 @@ if (!isset($_SESSION['user_id'])) {
         'success' => false,
         'message' => 'User not logged in'
     ]);
-    ob_end_flush();
     exit();
 }
 
@@ -29,14 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         'success' => false,
         'message' => 'Invalid request method'
     ]);
-    ob_end_flush();
     exit();
 }
 
-// Get data dari POST
+// Get data dari POST (form/x-www-form-urlencoded)
 $user_id = $_SESSION['user_id'];
 $score = isset($_POST['score']) ? intval($_POST['score']) : 0;
-$wave = isset($_POST['wave']) ?  intval($_POST['wave']) : 0;
+$wave = isset($_POST['wave']) ? intval($_POST['wave']) : 0;
 $game_time = isset($_POST['game_time']) ? intval($_POST['game_time']) : 0;
 
 // Validate data
@@ -45,7 +42,6 @@ if ($score < 0 || $wave < 1) {
         'success' => false,
         'message' => 'Invalid score or wave data'
     ]);
-    ob_end_flush();
     exit();
 }
 
@@ -64,17 +60,17 @@ if (mysqli_query($koneksi, $query)) {
                    FROM game_scores 
                    WHERE score > '$score_esc'";
     $rank_result = mysqli_query($koneksi, $rank_query);
-    $rank_data = mysqli_fetch_assoc($rank_result);
-    
+    $rank_data = $rank_result ? mysqli_fetch_assoc($rank_result) : null;
+    $rank = ($rank_data && isset($rank_data['rank'])) ? $rank_data['rank'] : 1;
+
     echo json_encode([
         'success' => true,
         'message' => 'Score saved successfully',
         'score_id' => mysqli_insert_id($koneksi),
-        'rank' => $rank_data['rank'],
+        'rank' => $rank,
         'score' => $score,
         'wave' => $wave
     ]);
-    ob_end_flush();
     exit();
 } else {
     $db_error = mysqli_error($koneksi);
@@ -84,7 +80,6 @@ if (mysqli_query($koneksi, $query)) {
         'success' => false,
         'message' => 'Database error: ' . $db_error
     ]);
-    ob_end_flush();
     exit();
 }
 ?>
