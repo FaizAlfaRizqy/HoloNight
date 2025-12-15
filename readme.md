@@ -178,7 +178,7 @@ HoloNight/
 
 
 ## Demo Gameplay
-[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)]([https://www.youtube.com/watch?v=ge8Ze9Tht-Q]
+[![Watch the video](https://img.youtube.com/vi/ge8Ze9Tht-Q/0.jpg)](https://www.youtube.com/watch?v=ge8Ze9Tht-Q)
 
 
 ## 👥 Authors
