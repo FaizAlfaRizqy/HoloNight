@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 <div class="button-group">
                     <button type="submit" class="btn-confirm">CONFIRM</button>
-                    <a href="../register.php" class="btn-back">REGISTER</a>
+                    <a href="register.php" class="btn-back">REGISTER</a>
                 </div>
             </form>
             
